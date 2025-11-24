@@ -1,0 +1,71 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page background */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dce6ff, #f2f6ff);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main container */
+.landing-box {
+    background: #ffffff;
+    width: 420px;
+    padding: 45px 40px;
+    border-radius: 16px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.12);
+    text-align: center;
+    animation: fadeIn 0.35s ease-out;
+}
+
+/* Main heading */
+.landing-box h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #244bcc;
+    margin-bottom: 15px;
+}
+
+/* Subtext */
+.landing-box p {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Primary button */
+.login-button {
+    display: inline-block;
+    width: 75%;
+    padding: 14px 0;
+
+    background-color: #244bcc;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+
+    transition: 0.25s ease;
+}
+
+.login-button:hover {
+    background-color: #19389f;
+    transform: translateY(-3px);
+    box-shadow: 0px 5px 12px rgba(0,0,0,0.15);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
