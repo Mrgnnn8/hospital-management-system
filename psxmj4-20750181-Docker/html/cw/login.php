@@ -77,6 +77,8 @@ $conn->close();
         <input type="submit" id="login" value="Login">
     </form>
 
+    <p>Powered by the University of Nottingham</p>
+
     <?php if (!empty($error)): ?>
         <p style="color:red; font-weight:bold;"><?php echo $error; ?></p>
     <?php endif; ?>
