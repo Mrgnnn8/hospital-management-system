@@ -2,6 +2,7 @@
 
 require "db_connection.php";
 require 'session.php';
+require_login();
 
 // Query for all doctors
 $sql = "SELECT * FROM doctor ORDER BY lastname ASC";

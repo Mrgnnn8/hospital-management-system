@@ -70,6 +70,12 @@ $conn->close();
 
     <p>Queens Medical Centre Staff Login</p>
 
+    <?php if (isset($_GET['password_changed'])): ?>
+    <p style="color:green; font-weight:bold;">
+        Your password has been updated. Please log in.
+    </p>
+    <?php endif; ?>
+
     <form method="POST" action="">
         <input type="text" name="username" placeholder="Username" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
@@ -79,9 +85,10 @@ $conn->close();
 
     <p>Powered by the University of Nottingham</p>
 
-    <?php if (!empty($error)): ?>
-        <p style="color:red; font-weight:bold;"><?php echo $error; ?></p>
+    <?php if (!empty($message)): ?>
+    <p style="color:red; font-weight:bold;"><?php echo $message; ?></p>
     <?php endif; ?>
+
 </div>
 </body>
 
