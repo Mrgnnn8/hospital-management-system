@@ -1,6 +1,6 @@
 <?php
-require 'session.php';
-require 'db_connection.php';
+require 'includes/db_connection.php';
+require 'includes/session.php';
 
 if (isset($_SESSION['logged_in'])) {
     header("Location: home.php");

@@ -1,6 +1,10 @@
 <?php
-require 'db_connection.php';
-require 'render_patient_info.php';
+require 'includes/db_connection.php';
+require 'includes/renderPatientProfileView.php';
+require 'includes/header.php';
+
+$page_title = 'Patient Search';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

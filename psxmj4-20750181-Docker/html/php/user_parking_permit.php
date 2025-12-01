@@ -1,7 +1,11 @@
 <?php
-require 'session.php';
-require 'db_connection.php';
+require 'includes/db_connection.php';
+require 'includes/session.php';
 require_login();
+require 'includes/header.php';
+
+$page_title = 'Parking Permits';
+
 
 $sql = "SELECT permit_application_id, staffno, vehicle_reg, status, request_date,
                last_update, notes

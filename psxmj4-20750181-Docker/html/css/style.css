@@ -1,0 +1,244 @@
+/* ========================================= */
+/* 1. IMPORTS & GLOBAL VARIABLES             */
+/* ========================================= */
+@import url('https://db.onlinewebfonts.com/c/2568e173df3a278bff48d9926aa656f6?family=Calisto+MT');
+
+/* Apply the smooth transition to everything, just like the login form */
+* {
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Ensures padding doesn't break layout width */
+}
+
+/* ========================================= */
+/* 2. BODY & BACKGROUND (From Login)         */
+/* ========================================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Calisto MT", serif;
+    color: #555; /* Slightly darker than #777 for better readability on main content */
+    
+    /* Reusing your background image and overlay */
+    background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
+                url('../qmc.jpg'); /* Note: '..' goes up from css/ to html/cw/ to find image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps background still while scrolling */
+    min-height: 100vh;
+}
+
+/* ========================================= */
+/* 3. HEADER STYLING (The Green Theme)       */
+/* ========================================= */
+header {
+    /* Using the Green #51AC74 from your #login button */
+    background: #51AC74; 
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2); /* Shadow style from login form */
+}
+
+.header-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ========================================= */
+/* 4. NAVIGATION MENUS                       */
+/* ========================================= */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav li {
+    margin-left: 15px;
+}
+
+/* Links behave like the buttons */
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 3px; /* Matches input border-radius */
+    border: 1px solid transparent;
+}
+
+nav a:hover {
+    /* The Darker Green #3D8C5D from your #login:hover */
+    background: #3D8C5D;
+    transform: scale(1.05);
+}
+
+/* The Logout Button - Distinct style */
+.btn-logout {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-logout:hover {
+    background: #d9534f; /* Red warning color for logout */
+    border-color: #d9534f;
+}
+
+/* ========================================= */
+/* 5. USER INFO BAR                          */
+/* ========================================= */
+.user-info-bar {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid #afafaf; /* Matches your input border color */
+    padding: 10px 0;
+    font-size: 0.9rem;
+    color: #777; /* Matches your login text color */
+}
+
+.user-info-bar .info-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: right;
+}
+
+.user-info-bar strong {
+    color: #51AC74; /* Highlights user details in Green */
+}
+
+/* ========================================= */
+/* 6. MAIN CONTAINER & PANELS                */
+/* ========================================= */
+.container {
+    /* Mimics #login-form style but adapted for page content */
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: rgba(255, 255, 255, 1);
+    padding: 30px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 8px #777; /* Exact shadow from login */
+    min-height: 400px;
+}
+
+h2, h3, h4 {
+    color: #777;
+    border-bottom: 2px solid #51AC74; /* Underline headings with theme color */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* ========================================= */
+/* 7. DASHBOARD CARDS (For home.php)         */
+/* ========================================= */
+.task-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.task-card {
+    flex: 1 1 300px; /* Responsive: grows/shrinks */
+    background: #fff;
+    border: 1px solid #afafaf; /* Matches input border */
+    border-radius: 3px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+}
+
+.task-card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================= */
+/* 8. BUTTONS & INPUTS (Global)              */
+/* ========================================= */
+/* Standard Primary Button (Like your Login Button) */
+.btn-primary {
+    display: inline-block;
+    background: #51AC74;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #3D8C5D;
+    transform: scale(1.02);
+}
+
+/* Secondary Button (for Admin or less important actions) */
+.btn-secondary {
+    display: inline-block;
+    background: #777;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+/* Inputs (Search bars, etc.) */
+input[type="text"], 
+input[type="password"], 
+input[type="date"],
+select {
+    color: #777;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #afafaf;
+    border-radius: 3px;
+    outline: none;
+    font-family: "Calisto MT", serif;
+}
+
+/* Tables (for Patient Search Results) */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #51AC74; /* Theme Green */
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}

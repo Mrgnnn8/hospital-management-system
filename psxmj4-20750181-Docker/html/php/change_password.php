@@ -1,6 +1,6 @@
 <?php
-require "db_connection.php";
-require 'session.php';
+require 'includes/db_connection.php';
+require 'includes/session.php';
 require_login();
 
 $message = "";

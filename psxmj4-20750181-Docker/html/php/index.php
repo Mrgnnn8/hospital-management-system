@@ -1,5 +1,6 @@
 <?php
-require 'session.php';
+require 'components/db_connection.php';
+require 'components/session.php';
 ?>
 
 <!DOCTYPE html>

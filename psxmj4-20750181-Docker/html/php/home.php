@@ -1,39 +1,30 @@
 <?php
-require "db_connection.php";
-require 'session.php';
+require 'includes/db_connection.php';
+require 'includes/session.php';
 require_login();
+require 'includes/header.php';
+
+$page_title = 'QMC Dashboard';
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
+<section class="dashboard-welcome">
+    <h2>Welcome to the QMC System</h2>
+</section>
 
-<body>
+<div class="task-grid">
+    <div class="task-card">
+            <h4>Patient Lookup</h4>
+            <p>Search for patients by Name or NHS Number.</p>
+            <a href="patient_lookup.php" class="btn btn-primary">Go to Search</a>
+    </div>
 
-<h1>Queens Medical Centre Dashboard</h1>
+    <div class="task-card">
+        <h4>Parking Permit</h4>
+        <p>View status or reqiest a new permit.</p>
+        <a href="user_parking_permit.php" class="btn btn-primary">Manage Permit</a>
+    </div>
 
-<p>Website access level: 
-    <strong>
-        <?php echo ($_SESSION['is_admin'] == 1) ? 'Admin' : 'User'; ?>
-    </strong>
-</p>
+</div>
 
-<p>Your username: 
-    <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>
-</p>
-
-<p><a href="user_parking_permit.php">View parking permit status</a></p>
-
-<p><a href="doctor.php">Doctor Information</a></p>
-
-<p><a href="change_password.php">Change Password</a></p>
-
-<p><a href="logout.php">Log Out</a></p>
-
-</body>
-</html>
 
