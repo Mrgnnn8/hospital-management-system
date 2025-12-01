@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Change Password</title>
+    <title>Password Management</title>
 </head>
 <body>
 
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <button type="submit">Update Password</button>
 </form>
 
-<p><a href="home.php">Back to Home</a></p>
+<p><a href="home.php">Dashboard</a></p>
 
 <?php if (!empty($message)) echo "<p>$message</p>"; ?>
 

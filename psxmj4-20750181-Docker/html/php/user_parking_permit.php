@@ -3,13 +3,6 @@ require 'session.php';
 require 'db_connection.php';
 require_login();
 
-// OPTIONAL: Only allow admins to view permits
-// if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-//     header("Location: home.php");
-//     exit();
-// }
-
-// Fetch all parking permit applications
 $sql = "SELECT permit_application_id, staffno, vehicle_reg, status, request_date,
                last_update, notes
         FROM parking_permit_status";
@@ -63,7 +56,7 @@ $result = $conn->query($sql);
     ?>
 </table>
 
-<p><a href="home.php">Back to Home</a></p>
+<p><a href="home.php">Dashboard</a></p>
 
 </body>
 </html>

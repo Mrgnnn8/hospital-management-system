@@ -4,7 +4,6 @@ require "db_connection.php";
 require 'session.php';
 require_login();
 
-// Query for all doctors
 $sql = "SELECT * FROM doctor ORDER BY lastname ASC";
 $result = $conn->query($sql);
 ?>
@@ -66,10 +65,17 @@ if ($result->num_rows > 0) {
 
 <div class="container">
 
-    <h1>Add a new Doctor</h1>
-    <p>Secure access for doctors and administrators.</p>
+<?php if ($_SESSION['is_admin'] ==1): ?>
+    <p><a href="add_doctor.php">Add New Doctor</a></p>
+
+<?php endif; ?>
+
+
+<p>Secure access for doctors and administrators.</p>
 
 <p><a href="home.php">Dashboard</a></p>
+
+
 
     <p class="footer-text">
         Provided by Morgan Jones @ The University of Nottingham

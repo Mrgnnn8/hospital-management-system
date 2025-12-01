@@ -14,7 +14,7 @@ require_login();
 
 <body>
 
-<h1>Welcome to the Home Page</h1>
+<h1>Queens Medical Centre Dashboard</h1>
 
 <p>Website access level: 
     <strong>

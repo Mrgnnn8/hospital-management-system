@@ -60,15 +60,15 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login</title>
+    <title>Staff Login (QMC)</title>
     <link rel="stylesheet" href="/css/login2.css">
 </head>
 
 <body>
 <div id="login-form">
-    <h3>Login Portal</h3>
+    <h3>Queens Medical Centre</h3>
 
-    <p>Queens Medical Centre Staff Login</p>
+    <p>Staff Access Portal</p>
 
     <?php if (isset($_GET['password_changed'])): ?>
     <p style="color:green; font-weight:bold;">
