@@ -1,49 +1,78 @@
 <?php
-require 'includes/db_connection.php';
-require 'includes/renderPatientProfileView.php';
-require 'includes/header.php';
+ini_set('display_errors', 1); error_reporting(E_ALL);
 
-$page_title = 'Patient Search';
+require 'data_access/formatDisplayValue.php'; 
+require 'includes/renderPatientProfileView.php'; 
+require 'includes/db_connection.php'; 
+require 'includes/session.php'; 
+require 'data_access/PatientDAO.php'; 
 
+require_login();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$page_title = 'Patient Information';
+$view_nhs = $_GET['view_nhs'] ?? null;
+$search_term = $_POST['patient_search'] ?? ''; 
 
-    $last_name = $_POST['lastname'] ?? '';
-    $nhs_no = $_POST['patient_no'] ?? '';
-
-}
+require 'includes/header.php'; 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Patient Information</title>
-</head>
-<body>
 
-<h1>Patient Lookup</h1>
+<div class="patient-lookup-container">
 
-<form method="POST">
-    <label for="lastname">Last Name:</label>
-    <input type="text" id="lastname" name="lastname">
+    <?php if ($view_nhs): ?>
+        <?php
+        $full_data = PatientDAO::getFullPatientData($conn, $view_nhs);
+        renderPatientFullProfile($full_data);
+        ?>
 
-    <br><br>
+    <?php else: ?>
+        <h1>Patient Database</h1>
+        
+        <form method="POST" class="search-bar-container">
+            <label for="patient_search">NHS No. or Last Name:</label>
+            <input type="text" id="patient_search" name="patient_search" value="<?= htmlspecialchars($search_term) ?>">
+            <input type="submit" value="Search" class="btn btn-primary">
+        </form>
 
-    <label for="patient_no">NHS Number:</label>
-    <input type="text" id="patient_no" name="patient_no">
+        <hr>
 
-    <br><br>
+        <?php
+        $result = PatientDAO::searchPatients($conn, $search_term);
 
-    <input type="submit" value="Search">
-</form>
+        if ($result->num_rows > 0) {
+            echo "<table class='styled-table'>";
+            echo "<thead><tr>
+                    <th>NHS No.</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                  </tr></thead><tbody>";
 
-<hr>
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . safeDisplay($row['NHSno']) . "</td>";
+                echo "<td>" . safeDisplay($row['firstname']) . "</td>";
+                echo "<td>" . safeDisplay($row['lastname']) . "</td>";
+                echo "<td>" . safeDisplay($row['phone']) . "</td>";
+                echo "<td>
+                        <a href='patient_lookup.php?view_nhs=" . urlencode($row['NHSno']) . "' class='btn btn-secondary'>
+                           View Profile
+                        </a>
+                      </td>";
+                echo "</tr>";
+            }
+            echo "</tbody></table>";
+        } else {
+            echo "<p style='text-align:center;'>No patients found.</p>";
+        }
+
+            echo "<br><a href='add_new_patient.php' class='btn btn-secondary'>Add new patient</a>";
+
+        ?>
+    <?php endif; ?>
+
+</div>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    renderPatientFullProfile($conn, $last_name, $nhs_no);
-}
+require 'includes/footer.php'; 
 ?>
-
-</body>
-</html>

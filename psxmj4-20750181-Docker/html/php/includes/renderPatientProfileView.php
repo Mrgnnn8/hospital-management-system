@@ -1,106 +1,100 @@
 <?php
-function renderPatientFullProfile($conn, $last_name, $nhs_no) {
+function renderPatientFullProfile($patient) {
 
-    $stmt = $conn->prepare("
-        SELECT * FROM patient
-        WHERE lastname = ? OR NHSno = ?
-        ORDER BY lastname ASC
-    ");
-    $stmt->bind_param("ss", $last_name, $nhs_no);
-    $stmt->execute();
-    $patient_result = $stmt->get_result();
-
-    if ($patient_result->num_rows === 0) {
-        echo "<p>No patient found.</p>";
+    if (!$patient) {
+        echo "<div class='alert warning'>Patient data not found.</div>";
+        echo "<br><a href='patient_lookup.php' class='btn btn-secondary'>&larr; Back to Search</a>";
         return;
     }
 
-    $patient = $patient_result->fetch_assoc();
-
+    $gender_text = safeDisplay(($patient['gender'] == 1) ? "Female" : "Male", 'N/A');
+    
     echo "<h2>Patient Details</h2>";
-    echo "<table border='1' cellpadding='8'>
-            <tr>
-                <th>NHS number</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Age</th>
-                <th>Gender</th>
-            </tr>
-            <tr>
-                <td>{$patient['NHSno']}</td>
-                <td>{$patient['firstname']}</td>
-                <td>{$patient['lastname']}</td>
-                <td>{$patient['phone']}</td>
-                <td>{$patient['address']}</td>
-                <td>{$patient['age']}</td>
-                <td>" . (($patient['gender'] == 1) ? "Female" : "Male") . "</td>
-            </tr>
+    echo "<table class='styled-table'>
+            <thead>
+                <tr>
+                    <th>NHS number</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>" . safeDisplay($patient['NHSno']) . "</td>
+                    <td>" . safeDisplay($patient['firstname']) . "</td>
+                    <td>" . safeDisplay($patient['lastname']) . "</td>
+                    <td>" . safeDisplay($patient['phone'], 'No Phone') . "</td>
+                    <td>" . safeDisplay($patient['address'], 'N/A') . "</td>
+                    <td>" . safeDisplay($patient['age'], 'N/A') . "</td>
+                    <td>" . $gender_text . "</td>
+                </tr>
+            </tbody>
         </table><br><br>";
 
-    $exam_stmt = $conn->prepare("
-        SELECT * FROM patientexamination
-        WHERE patientid = ?
-        ORDER BY date DESC
-    ");
-    $exam_stmt->bind_param("s", $patient['NHSno']);
-    $exam_stmt->execute();
-    $exam_results = $exam_stmt->get_result();
-
-    echo "<details><summary><strong>Examinations</strong></summary><br>";
-
-    if ($exam_results->num_rows > 0) {
-        echo "<table border='1' cellpadding='8'>
-                <tr>
-                    <th>Doctor ID</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                </tr>";
-        while ($exam = $exam_results->fetch_assoc()) {
+    echo "<details open><summary><strong>Examinations</strong></summary><div class='details-content'>";
+    
+    if (!empty($patient['examinations'])) {
+        echo "<table class='styled-table'>
+                <thead>
+                    <tr>
+                        <th>Doctor ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        foreach ($patient['examinations'] as $exam) {
             echo "<tr>
-                    <td>{$exam['doctorid']}</td>
-                    <td>{$exam['date']}</td>
-                    <td>{$exam['time']}</td>
+                    <td>" . safeDisplay($exam['doctorid']) . "</td>
+                    <td>" . safeDisplay($exam['date'], 'Unknown Date') . "</td>
+                    <td>" . safeDisplay($exam['time'], 'N/A') . "</td>
                   </tr>";
         }
-        echo "</table>";
+        echo "</tbody></table>";
     } else {
         echo "<p>No examinations found.</p>";
     }
-    echo "</details><br><br>";
+    echo "</div></details><br><br>";
 
-    $test_stmt = $conn->prepare("
-        SELECT * FROM patient_test
-        WHERE pid = ?
-        ORDER BY date DESC
-    ");
-    $test_stmt->bind_param("s", $patient['NHSno']);
-    $test_stmt->execute();
-    $test_results = $test_stmt->get_result();
-
-    echo "<details><summary><strong>Test Results</strong></summary><br>";
-
-    if ($test_results->num_rows > 0) {
-        echo "<table border='1' cellpadding='8'>
-                <tr>
-                    <th>Doctor ID</th>
-                    <th>Test ID</th>
-                    <th>Date</th>
-                    <th>Report</th>
-                </tr>";
-        while ($test = $test_results->fetch_assoc()) {
+    echo "<details open><summary><strong>Test Results</strong></summary><div class='details-content'>";
+    
+    if (!empty($patient['tests'])) {
+        echo "<table class='styled-table'>
+                <thead>
+                    <tr>
+                        <th>Doctor ID</th>
+                        <th>Test ID</th>
+                        <th>Date</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        foreach ($patient['tests'] as $test) {
             echo "<tr>
-                    <td>{$test['doctorid']}</td>
-                    <td>{$test['testid']}</td>
-                    <td>{$test['date']}</td>
-                    <td>{$test['report']}</td>
+                    <td>" . safeDisplay($test['doctorid']) . "</td>
+                    <td>" . safeDisplay($test['testid']) . "</td>
+                    <td>" . safeDisplay($test['date'], 'Missing Date') . "</td>
+                    <td>" . safeDisplay($test['report'], 'Pending') . "</td>
                  </tr>";
         }
-        echo "</table>";
+        echo "</tbody></table>";
     } else {
         echo "<p>No tests found.</p>";
     }
-    echo "</details>";
+    
+    echo "</div></details>"; 
+    
+    echo "<div class='action-buttons' style='margin-top:20px;'>";
+    
+    echo "<a href='test_new.php?pid=" . urlencode($patient['NHSno']) . "' class='btn btn-primary'>Record Test Result</a>";
+    
+    echo "&nbsp;";
+    
+    echo "<a href='patient_lookup.php' class='btn btn-secondary'>Back to Directory</a>";
+    echo "</div>";
 }
 ?>

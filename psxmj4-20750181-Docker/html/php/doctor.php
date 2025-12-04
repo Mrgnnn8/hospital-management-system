@@ -2,10 +2,16 @@
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_login();
+require_admin();
+
+$page_title = 'Doctor Search';
+require 'includes/header.php';
 
 $sql = "SELECT * FROM doctor ORDER BY lastname ASC";
 $result = $conn->query($sql);
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,15 +50,13 @@ $result = $conn->query($sql);
 <?php
 if ($result->num_rows > 0) {
     echo "<table>";
-    echo "<tr><th>Staff No.</th><th>First Name</th><th>Last Name</th><th>Pay</th><th>Specialisation</th><tr>";
+    echo "<tr><th>Staff No.</th><th>First Name</th><th>Last Name</th>";
 
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . htmlspecialchars($row['staffno']) . "</td>";
         echo "<td>" . htmlspecialchars($row['firstname']) . "</td>";
         echo "<td>" . htmlspecialchars($row['lastname']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['pay']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['specialisation']) . "</td>";
         echo "</tr>";
     }
 
@@ -73,8 +77,6 @@ if ($result->num_rows > 0) {
 <p>Secure access for doctors and administrators.</p>
 
 <p><a href="home.php">Dashboard</a></p>
-
-
 
     <p class="footer-text">
         Provided by Morgan Jones @ The University of Nottingham

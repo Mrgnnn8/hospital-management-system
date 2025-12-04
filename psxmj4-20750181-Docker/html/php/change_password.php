@@ -2,6 +2,7 @@
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_login();
+require 'includes/header.php';
 
 $message = "";
 

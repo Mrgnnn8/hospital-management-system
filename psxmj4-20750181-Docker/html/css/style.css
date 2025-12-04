@@ -242,3 +242,37 @@ select {
 .styled-table tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
 }
+
+/* ========================================= */
+/* 9. FOOTER STYLING */
+/* ========================================= */
+.site-footer {
+    /* Using the darker green on hover from your login button */
+    background: #3D8C5D; 
+    color: white;
+    padding: 15px 0;
+    margin-top: 30px; /* Add space between main content and footer */
+    font-size: 0.9em;
+}
+
+.site-footer .header-container {
+    /* Reuses the centered, flex container from the header for consistency */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .site-footer .header-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+}

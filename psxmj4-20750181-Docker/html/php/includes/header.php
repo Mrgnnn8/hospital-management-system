@@ -20,22 +20,21 @@ $access_level = $is_admin ? 'Admin' : 'Doctor';
 <body>
 <header>
     <div class="header-container">
-        <h1>Queens Medical Centre System</h1>
+        <h1>Queens Medical Centre</h1>
 
         <nav>
             <ul>
                 <li><a href="home.php">Dashboard</a></li>
 
-                <li><a href="patient_lookup.php">Patient Lookup</a></li>
-
-                <li><a href="test_new.php">Add & Prescribe Test</a></li>
-
-                <li><a href="change_password.php">Change Password</a></li>
-
-                <li><a href="user_parking_permit.php">Parking Permit Status</a></li>
+                <li><a href="patient_lookup.php">Patient Directory</a></li>
 
                 <?php if ($is_admin): ?>
-                    <li class="admin-link"><a href="admin_manage_doctors.php">Manage Doctors</a></li>
+                    <li><a href="doctor.php">Current Staff</a></li>
+                <?php endif; ?>
+
+                <li><a href="manage_account.php">Manage Account</a></li>
+                
+                <?php if ($is_admin): ?>
                     <li class="admin-link"><a href="admin_audit_trail.php">Audit Trail</a></li>
                 <?php endif; ?>
 

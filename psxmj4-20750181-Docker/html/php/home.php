@@ -2,9 +2,9 @@
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_login();
-require 'includes/header.php';
 
 $page_title = 'QMC Dashboard';
+require 'includes/header.php';
 
 ?>
 
@@ -14,17 +14,30 @@ $page_title = 'QMC Dashboard';
 
 <div class="task-grid">
     <div class="task-card">
-            <h4>Patient Lookup</h4>
-            <p>Search for patients by Name or NHS Number.</p>
+            <h4>Patient Directory</h4>
+            <p>Access existing patient records.</p>
             <a href="patient_lookup.php" class="btn btn-primary">Go to Search</a>
     </div>
 
+    <?php if ($is_admin): ?>
+
+        <div class="task-card">
+                <h4>Doctor Directory</h4>
+                <p>View all currently employed doctors.</p>
+                <a href="doctor.php" class="btn btn-primary">View Doctors</a>
+        </div>
+    <?php endif; ?>
+
     <div class="task-card">
-        <h4>Parking Permit</h4>
-        <p>View status or reqiest a new permit.</p>
-        <a href="user_parking_permit.php" class="btn btn-primary">Manage Permit</a>
+            <h4>Manage Account</h4>
+            <p>Manage account settings.</p>
+            <a href="manage_account.php" class="btn btn-primary">Manage Account</a>
     </div>
 
 </div>
+
+<?php
+require 'includes/footer.php';
+?>
 
 
