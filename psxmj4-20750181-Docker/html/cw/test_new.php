@@ -47,7 +47,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
 
 $available_tests = TestDAO::getAvailableTests($conn);
 
-require_once __DIR__ . '/includes/header.php';
+require 'includes/header.php';
 ?>
 
 <section class="task-form-area">

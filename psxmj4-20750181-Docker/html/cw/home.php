@@ -5,6 +5,7 @@ require_login();
 
 $page_title = 'QMC Dashboard';
 require 'includes/header.php';
+require 'data_access/WardDAO.php';
 
 ?>
 
@@ -32,6 +33,18 @@ require 'includes/header.php';
             <h4>Manage Account</h4>
             <p>Manage account settings.</p>
             <a href="manage_account.php" class="btn btn-primary">Manage Account</a>
+    </div>
+
+    <div class="task-card">
+        <h4>Hospital Ward Capacity Overview</h4>
+        <p>View spaces available<p>
+        <a href="ward_capacity.php" class="btn btn-primary">View Availability</a>
+    </div>
+
+    <div class="task-card">
+        <h4>Add a New Test Type</h4>
+        <p>Add a new test type to the database<p>
+        <a href="add_new_test_type.php" class="btn btn-primary">Add a new test</a>
     </div>
 
 </div>

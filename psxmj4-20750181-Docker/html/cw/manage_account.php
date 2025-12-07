@@ -12,7 +12,7 @@ $error_message = '';
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
-require_once __DIR__ . '/includes/header.php'; 
+require 'includes/header.php'; 
 ?>
 
     <h2>Doctor Profile Overview</h2>
@@ -23,9 +23,9 @@ require_once __DIR__ . '/includes/header.php';
             <p>Manage security and parking requests.</p>
             <hr>
             
-            <p><a href="change_password.php" class="btn btn-secondary">🔑 Change Password</a></p>
+            <p><a href="change_password.php" class="btn btn-secondary">Change Password</a></p>
 
-            <p><a href="user_parking_permit.php" class="btn btn-secondary">🚗 View/Request Parking Permit</a></p>
+            <p><a href="user_parking_permit.php" class="btn btn-secondary">View/Request Parking Permit</a></p>
         </div>
 
         <div class="detail-card">
@@ -43,12 +43,11 @@ require_once __DIR__ . '/includes/header.php';
                 </tbody>
             </table>
             
-            <a href="edit_profile.php" class="btn btn-primary">✏️ Edit Details</a>
+            <a href="edit_profile.php" class="btn btn-primary">Edit Details</a>
         </div>
     </div>
 </section>
 
 <?php
-// FIX: Close the HTML structure
-require_once __DIR__ . '/includes/footer.php';
+require 'includes/footer.php';
 ?>

@@ -218,29 +218,106 @@ select {
     font-family: "Calisto MT", serif;
 }
 
-/* Tables (for Patient Search Results) */
 .styled-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin: 20px 0;
+    font-size: 0.95em; /* Slightly larger for readability */
+    font-family:  "Calisto MT", serif; /* Clean sans-serif */
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0; /* Subtle outer border */
 }
 
+/* Header: Clean, subtle gray instead of bold green */
 .styled-table thead tr {
-    background-color: #51AC74; /* Theme Green */
-    color: #ffffff;
+    background-color: #f8f9fa; 
+    color: #2c3e50; /* Dark slate blue/gray for professionalism */
     text-align: left;
+    border-bottom: 2px solid #51AC74; /* Thin green accent line to keep branding */
 }
 
-.styled-table th,
+.styled-table th {
+    padding: 12px 15px;
+    font-weight: 600;
+    text-transform: uppercase; /* Adds authority/structure */
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+}
+
 .styled-table td {
     padding: 12px 15px;
-    border-bottom: 1px solid #dddddd;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+/* Rows: Hover effect is more important than alternating colors in clinical apps */
+.styled-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #f1f8e9; /* Very pale green highlight on hover */
+    cursor: default;
+}
+
+/* Typography for data */
+.styled-table td {
+    vertical-align: middle;
+}
+
+/* Optional: Make ID columns looking like data tags */
+.styled-table td:first-child {
+    font-family:  "Calisto MT", serif; /* Monospace for IDs (NHS No) */
+    color: #555;
+    font-weight: bold;
+}
+
+/* Ward Capacity Progress Bar */
+.progress-track {
+    background-color: #e0e0e0; /* Light gray background */
+    border-radius: 10px;
+    width: 100%;
+    height: 15px;
+    overflow: hidden; /* Ensures the inner bar stays inside rounded corners */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease; /* Smooth animation on load */
+}
+
+.capacity-text {
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-left: 8px;
+    color: #555;
+}
+
+/* Password Strength Indicator Styling */
+.password-strength-container {
+    margin-top: 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+    /* Match the width of your inputs (adjust if your inputs are 100%) */
+    width: 70%; 
+    max-width: 100%;
+}
+
+.strength-bar {
+    height: 6px;
+    background-color: #e0e0e0; /* The gray background you see */
+    margin-top: 4px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#strength-bar-fill {
+    height: 100%;
+    width: 0%; /* Start at 0 width */
+    transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 /* ========================================= */

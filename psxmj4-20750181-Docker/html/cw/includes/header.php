@@ -1,10 +1,14 @@
 <?php
+require 'data_access/doctorDAO.php';
 
 $page_title = $page_title ?? 'QMC Dashboard';
 
 $is_admin = ($_SESSION['is_admin'] ?? 0) == 1;
 $username = htmlspecialchars($_SESSION['username'] ?? 'Guest');
 $access_level = $is_admin ? 'Admin' : 'Doctor';
+
+$staffno =  doctorDAO::getStaffNoByUsername($conn, $username)
+
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +32,10 @@ $access_level = $is_admin ? 'Admin' : 'Doctor';
 
                 <li><a href="patient_lookup.php">Patient Directory</a></li>
 
+                <li><a href="ward_capacity.php">Ward Capacity</a></li>
+
+                <li><a href="add_new_test_type.php">New Test</a></li>
+
                 <?php if ($is_admin): ?>
                     <li><a href="doctor.php">Current Staff</a></li>
                 <?php endif; ?>
@@ -46,7 +54,7 @@ $access_level = $is_admin ? 'Admin' : 'Doctor';
 
 <div class="user-info-bar">
     <div class="info-container">
-        <span>Logged in as: <strong><?= $username ?></strong></span>
+        <span>Logged in as: <strong><?= $staffno ?></strong></span>
         <span>Access Level: <strong><?= $access_level ?></strong></span>
     </div>
 </div>

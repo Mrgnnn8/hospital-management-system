@@ -35,6 +35,8 @@ class TestDAO {
         $stmt->bind_param("s", $test_name);
         if ($stmt->execute()) return $conn->insert_id;
         return false;
-    } 
+    }
+
+    
 }
 ?>

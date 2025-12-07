@@ -14,8 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Prepare and execute the SQL statement to prevent SQL injection
-
     $stmt = $conn->prepare("
     SELECT password, is_admin FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
@@ -34,10 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['username'] = $username;
             $_SESSION['is_admin'] = $is_admin;
 
-            //
             session_regenerate_id(true);
 
-            // Redirect to home page
             header("Location: home.php");
             exit();
         } else {

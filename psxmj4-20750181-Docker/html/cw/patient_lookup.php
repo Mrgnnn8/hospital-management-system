@@ -1,19 +1,19 @@
 <?php
-ini_set('display_errors', 1); error_reporting(E_ALL);
 
-require 'data_access/formatDisplayValue.php'; 
-require 'includes/renderPatientProfileView.php'; 
-require 'includes/db_connection.php'; 
-require 'includes/session.php'; 
-require 'data_access/PatientDAO.php'; 
-
+require 'includes/session.php';
 require_login();
+
+require 'includes/db_connection.php';
+
+require 'data_access/formatDisplayValue.php';
+require 'includes/renderPatientProfileView.php';
+require 'data_access/PatientDAO.php';
 
 $page_title = 'Patient Information';
 $view_nhs = $_GET['view_nhs'] ?? null;
-$search_term = $_POST['patient_search'] ?? ''; 
+$search_term = $_POST['patient_search'] ?? '';
 
-require 'includes/header.php'; 
+require 'includes/header.php';
 ?>
 
 <div class="patient-lookup-container">
@@ -26,7 +26,7 @@ require 'includes/header.php';
 
     <?php else: ?>
         <h1>Patient Database</h1>
-        
+
         <form method="POST" class="search-bar-container">
             <label for="patient_search">NHS No. or Last Name:</label>
             <input type="text" id="patient_search" name="patient_search" value="<?= htmlspecialchars($search_term) ?>">
@@ -66,7 +66,7 @@ require 'includes/header.php';
             echo "<p style='text-align:center;'>No patients found.</p>";
         }
 
-            echo "<br><a href='add_new_patient.php' class='btn btn-secondary'>Add new patient</a>";
+        echo "<br><a href='new_patient.php' class='btn btn-primary'>Add new patient</a>";
 
         ?>
     <?php endif; ?>
@@ -74,5 +74,5 @@ require 'includes/header.php';
 </div>
 
 <?php
-require 'includes/footer.php'; 
+require 'includes/footer.php';
 ?>
