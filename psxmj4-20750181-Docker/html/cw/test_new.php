@@ -1,9 +1,9 @@
 <?php
 require 'includes/db_connection.php'; 
 require 'includes/session.php'; 
-require 'data_access/TestDAO.php';
-require 'data_access/PatientDAO.php'; 
-require 'data_access/formatDisplayValue.php'; 
+require_once 'data_access/TestDAO.php';
+require_once 'data_access/PatientDAO.php'; 
+require_once 'data_access/formatDisplayValue.php'; 
 require_login();
 
 $page_title = 'Record Test Result';

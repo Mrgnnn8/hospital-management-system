@@ -4,8 +4,7 @@ require 'includes/db_connection.php';
 class PatientDAO
 {
 
-    public static function searchPatients($conn, $search_term = '')
-    {
+    public static function searchPatients($conn, $search_term = '') {
         $sql = "SELECT * FROM patient";
 
         if (!empty($search_term)) {
@@ -24,26 +23,37 @@ class PatientDAO
         return $stmt->get_result();
     }
 
-    public static function getFullPatientData($conn, $nhs_no)
-    {
+    public static function getFullPatientData($conn, $nhs_no) {
+        //Core Patient Info
         $stmt = $conn->prepare("SELECT * FROM patient WHERE NHSno = ?");
         $stmt->bind_param("s", $nhs_no);
         $stmt->execute();
         $patient = $stmt->get_result()->fetch_assoc();
 
-        if (!$patient)
-            return null;
+        if (!$patient) return null;
 
+        //Examination history
         $exam_stmt = $conn->prepare("SELECT * FROM patientexamination WHERE patientid = ? ORDER BY date DESC");
         $exam_stmt->bind_param("s", $nhs_no);
         $exam_stmt->execute();
         $patient['examinations'] = $exam_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        $test_stmt = $conn->prepare("SELECT * FROM patient_test WHERE pid = ? ORDER BY date DESC");
+        //Prescribed tests
+        $test_stmt = $conn->prepare("
+            SELECT 
+                pt.*,          
+                t.testname     
+            FROM patient_test pt
+            JOIN TEST t ON pt.testid = t.testid
+            WHERE pt.pid = ? 
+            ORDER BY pt.date DESC
+        ");
+        
         $test_stmt->bind_param("s", $nhs_no);
         $test_stmt->execute();
         $patient['tests'] = $test_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
+        //Ward Admissions
         $ward_stmt = $conn->prepare("
             SELECT
                 a.*,

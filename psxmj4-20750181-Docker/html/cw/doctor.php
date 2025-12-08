@@ -1,87 +1,99 @@
 <?php
+ini_set('display_errors', 1); error_reporting(E_ALL);
+
 require 'includes/db_connection.php';
 require 'includes/session.php';
+require_once 'data_access/formatDisplayValue.php'; 
+
 require_login();
-require_admin();
 
-$page_title = 'Doctor Search';
-require 'includes/header.php';
+$page_title = 'Doctor Directory';
 
-$sql = "SELECT * FROM doctor ORDER BY lastname ASC";
-$result = $conn->query($sql);
+$search = trim($_GET['search'] ?? '');
+$params = [];
+$types = '';
+$sql = "SELECT * FROM doctor";
 
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Doctors</title>
-    <style>
-        container {
-            width: 80%;
-            margin: 50px auto;
-            font-family: Arial, sans-serif;
-            align-items: center;
-        }
-
-        table {
-            width: 80%;
-            margin: 30px auto;
-            border-collapse: collapse;
-            font-size: 18px;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-
-        th {
-            background: #244bcc;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-
-<h1 style="text-align:center;">Doctors in the System</h1>
-
-<?php
-if ($result->num_rows > 0) {
-    echo "<table>";
-    echo "<tr><th>Staff No.</th><th>First Name</th><th>Last Name</th>";
-
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['staffno']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['firstname']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['lastname']) . "</td>";
-        echo "</tr>";
-    }
-
-    echo "</table>";
-} else {
-    echo "<p style='text-align:center;'>No doctors found in the database.</p>";
+if (!empty($search)) {
+    $sql .= " WHERE firstname LIKE ? OR lastname LIKE ? OR staffno LIKE ? OR Specialisation LIKE ?";
+    $term = "%" . $search . "%";
+    $params = [$term, $term, $term, $term];
+    $types = 'ssss';
 }
+
+$sql .= " ORDER BY lastname ASC";
+
+$stmt = $conn->prepare($sql);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+
+require 'includes/header.php';
 ?>
 
-<div class="container">
+<section class="container">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+            <h2>Doctor Directory</h2>
+            <p class="guide-text">Search and view details of all hospital staff.</p>
+        </div>
+        
+        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+            <a href="new_doctor.php" class="btn btn-primary">+ Register New Doctor</a>
+        <?php endif; ?>
+    </div>
 
-<?php if ($_SESSION['is_admin'] ==1): ?>
-    <p><a href="add_doctor.php">Add New Doctor</a></p>
+    <form method="GET" style="margin-bottom: 30px; display: flex; gap: 10px;">
+        <input type="text" name="search" placeholder="Search by Name, Staff ID, or Specialisation..." 
+               value="<?= safeDisplay($search) ?>" style="flex: 1;">
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <?php if ($search): ?>
+            <a href="doctor.php" class="btn btn-secondary" style="background: #999;">Clear</a>
+        <?php endif; ?>
+    </form>
 
-<?php endif; ?>
+    <?php if ($result->num_rows > 0): ?>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Staff ID</th>
+                    <th>Full Name</th>
+                    <th>Specialisation</th>
+                    <th>Contact Address</th>
+                    <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+                        <th>Actions</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><strong><?= safeDisplay($row['staffno']) ?></strong></td>
+                        <td>
+                            <?= safeDisplay($row['firstname']) ?> <?= safeDisplay($row['lastname']) ?>
+                        </td>
+                        <td><?= safeDisplay($row['Specialisation']) ?></td>
+                        <td><?= safeDisplay($row['address']) ?></td>                        
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+                            <td>
+                                <a href="edit_doctor.php?id=<?= urlencode($row['staffno']) ?>" 
+                                   style="color: #51AC74; font-weight: bold; text-decoration: none;">Edit</a>
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <div class="alert alert-danger" style="text-align: center; margin-top: 20px;">
+            No doctors found matching your search.
+        </div>
+    <?php endif; ?>
 
+</section>
 
-<p>Secure access for doctors and administrators.</p>
-
-<p><a href="home.php">Dashboard</a></p>
-
-    <p class="footer-text">
-        Provided by Morgan Jones @ The University of Nottingham
-    </p>
-
-</body>
-</html>
+<?php require 'includes/footer.php'; ?>
 

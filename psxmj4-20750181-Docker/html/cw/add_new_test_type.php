@@ -2,8 +2,8 @@
 
 require 'includes/db_connection.php';
 require 'includes/session.php'; 
-require 'data_access/TestDAO.php';
-require 'data_access/formatDisplayValue.php'; 
+require_once 'data_access/TestDAO.php';
+require_once 'data_access/formatDisplayValue.php'; 
 
 require_login();
 
@@ -32,7 +32,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
 
 require 'includes/header.php';
 ?>
-
+    <main class="container">
     <h2>Add New Test to Catalogue</h2>
     
     <p class="guide-text">
@@ -44,7 +44,7 @@ require 'includes/header.php';
     <form method="POST" class="styled-form">
         <div class="form-group">
             <label for="test_name">New Test Name:</label>
-            <input type="text" id="test_name" name="test_name" placeholder="e.g. MRI Scan, Liver Function Test" required>
+            <input type="text" id="test_name" name="test_name" required>
         </div>
         
         <div class="form-actions">

@@ -1,7 +1,7 @@
 <?php
 require 'includes/db_connection.php';
 require 'includes/session.php';
-require 'data_access/formatDisplayValue.php';
+require_once 'data_access/formatDisplayValue.php';
 
 require_login();
 
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if ($stmt2->execute()) {
                     session_unset();
                     session_destroy();
-                    header("Location: login.php?password_changed=1");
+                    header("Location: index.php?password_changed=1");
                     exit();
                 } else {
                     $error_message = "Error updating password.";
@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 require 'includes/header.php';
 ?>
+<main class="container">
 
 <h2>Change Password</h2>
 <p class="guide-text">Update your account security credentials.</p>

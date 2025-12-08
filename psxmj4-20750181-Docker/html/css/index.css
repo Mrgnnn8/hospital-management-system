@@ -1,71 +1,67 @@
-/* Reset */
 * {
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* Page background */
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #dce6ff, #f2f6ff);
-    height: 100vh;
+    font-family: "Calisto MT", serif;
+    background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url('qmc.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Main container */
-.landing-box {
-    background: #ffffff;
-    width: 420px;
-    padding: 45px 40px;
-    border-radius: 16px;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.12);
+#login-form
+{
+    color: #777;
+    border: 0px solid #afafaf;
+    width: 400px;
+    margin: 20%;
+    margin-top: 200px;
     text-align: center;
-    animation: fadeIn 0.35s ease-out;
+    padding: 40px;
+    padding-top: 20px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 8px #777;
+    background: rgba(255, 255, 255, 1);
 }
 
-/* Main heading */
-.landing-box h1 {
-    font-size: 32px;
+input
+{
+    color: #777;
     font-weight: bold;
-    color: #244bcc;
-    margin-bottom: 15px;
+    width: 70%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #afafaf;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    outline: none;
 }
 
-/* Subtext */
-.landing-box p {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 30px;
-    line-height: 1.6;
+input[type="button"]
+{
+    color: white;
+    width: 30%;
+    border: 0px solid transparent;
+    outline: none;
+    cursor: pointer;
 }
 
-/* Primary button */
-.login-button {
-    display: inline-block;
-    width: 75%;
-    padding: 14px 0;
-
-    background-color: #244bcc;
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-    text-decoration: none;
-
-    transition: 0.25s ease;
+#login {
+    background: #51AC74;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.login-button:hover {
-    background-color: #19389f;
-    transform: translateY(-3px);
-    box-shadow: 0px 5px 12px rgba(0,0,0,0.15);
+#login:hover {
+    background: #3D8C5D; 
+    transform: scale(1.02); 
 }
 
-/* Fade-in animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}

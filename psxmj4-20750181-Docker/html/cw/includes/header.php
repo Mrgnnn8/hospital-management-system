@@ -1,5 +1,5 @@
 <?php
-require 'data_access/doctorDAO.php';
+require_once 'data_access/DoctorDAO.php';
 
 $page_title = $page_title ?? 'QMC Dashboard';
 
@@ -7,7 +7,7 @@ $is_admin = ($_SESSION['is_admin'] ?? 0) == 1;
 $username = htmlspecialchars($_SESSION['username'] ?? 'Guest');
 $access_level = $is_admin ? 'Admin' : 'Doctor';
 
-$staffno =  doctorDAO::getStaffNoByUsername($conn, $username)
+$staffno = DoctorDAO::getStaffNoByUsername($conn, $username)
 
 ?>
 
@@ -37,14 +37,17 @@ $staffno =  doctorDAO::getStaffNoByUsername($conn, $username)
                 <li><a href="add_new_test_type.php">New Test</a></li>
 
                 <?php if ($is_admin): ?>
-                    <li><a href="doctor.php">Current Staff</a></li>
+                    <li><a href="doctor.php">Staff Directory</a></li>
+                <?php endif; ?>
+
+                <?php if ($is_admin): ?>
+                    <li><a href="admin_parking.php">View permit requests</a></li>
+                
+                    <li class="admin-link"><a href="admin_audit_trail.php">Audit Trail</a></li>
+
                 <?php endif; ?>
 
                 <li><a href="manage_account.php">Manage Account</a></li>
-                
-                <?php if ($is_admin): ?>
-                    <li class="admin-link"><a href="admin_audit_trail.php">Audit Trail</a></li>
-                <?php endif; ?>
 
                 <li><a href="includes/logout.php" class="btn btn-logout">Log Out</a></li>
             </ul>
@@ -55,8 +58,6 @@ $staffno =  doctorDAO::getStaffNoByUsername($conn, $username)
 <div class="user-info-bar">
     <div class="info-container">
         <span>Logged in as: <strong><?= $staffno ?></strong></span>
-        <span>Access Level: <strong><?= $access_level ?></strong></span>
     </div>
 </div>
 
-<main class="container">

@@ -5,11 +5,14 @@ require_login();
 
 $page_title = 'QMC Dashboard';
 require 'includes/header.php';
-require 'data_access/WardDAO.php';
+require_once 'data_access/WardDAO.php';
 
 ?>
 
+<main class="container">
+
 <section class="dashboard-welcome">
+
     <h2>Welcome to the QMC System</h2>
 </section>
 
@@ -27,6 +30,13 @@ require 'data_access/WardDAO.php';
                 <p>View all currently employed doctors.</p>
                 <a href="doctor.php" class="btn btn-primary">View Doctors</a>
         </div>
+
+        <div class="task-card">
+                <h4>Parking Permit Requests</h4>
+                <p>View pending actions on parking permit requests.</p>
+                <a href="admin_parking.php" class="btn btn-primary">View Parking Permit Requests</a>
+        </div>
+
     <?php endif; ?>
 
     <div class="task-card">

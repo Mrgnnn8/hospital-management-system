@@ -1,6 +1,5 @@
 <?php
 
-
 function renderPatientFullProfile($patient) {
 
     if (!$patient) {
@@ -69,16 +68,19 @@ function renderPatientFullProfile($patient) {
         if (!empty($patient['tests'])) {
             echo "<table class='styled-table small-text'>
                     <thead>
-                        <tr><th>Doctor</th><th>Test ID</th><th>Date</th><th>Report</th></tr>
+                        <tr><th>Doctor</th><th>Test</th><th>Date</th><th>Report</th></tr>
                     </thead>
                     <tbody>";
+
             foreach ($patient['tests'] as $test) {
                 echo "<tr>
                         <td>" . safeDisplay($test['doctorid']) . "</td>
-                        <td>" . safeDisplay($test['testid']) . "</td>
+                        
+                        <td>" . safeDisplay($test['testname'] ?? $test['testid']) . "</td>
+                        
                         <td>" . safeDisplay($test['date'], '-') . "</td>
                         <td>" . safeDisplay($test['report'], 'Pending') . "</td>
-                     </tr>";
+                    </tr>";
             }
             echo "</tbody></table>";
         } else {
@@ -99,7 +101,7 @@ function renderPatientFullProfile($patient) {
                         <th>Doctor</th>
                         <th>Ward ID</th>
                         <th>Ward Name</th>
-                        <th>Date</th>
+                        <th>Admission Date</th>
                         <th>Time</th>
                         <th>Status</th>
                     </tr>

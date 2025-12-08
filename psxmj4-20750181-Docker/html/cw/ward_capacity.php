@@ -1,8 +1,8 @@
 <?php 
 require 'includes/db_connection.php';
 require 'includes/session.php';
-require 'data_access/WardDAO.php';
-require 'data_access/formatDisplayValue.php'; 
+require_once 'data_access/WardDAO.php';
+require_once 'data_access/formatDisplayValue.php'; 
 require_login();
 
 $ward_capacity_list = WardDAO::getAllWardsAvailability($conn);
@@ -10,7 +10,8 @@ $ward_capacity_list = WardDAO::getAllWardsAvailability($conn);
 $page_title = 'Ward Capacity';
 require 'includes/header.php';
 ?>
-    
+    <main class="container">
+
     <h2>Ward Capacity Dashboard</h2>
 
     <?php if ($ward_capacity_list && $ward_capacity_list->num_rows > 0): ?>

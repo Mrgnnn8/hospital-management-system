@@ -34,21 +34,50 @@ class DoctorDAO
         return $result;
     }
 
-    public static function updateDoctorProfile($conn, $staffNo, $address, $specialisation)
+    
+    public static function updateDoctorProfile($conn, $staffNo, $firstname, $lastname, $address, $specialisation, $newUsername)
     {
-        $stmt = $conn->prepare("
-            UPDATE doctor 
-            SET Address = ?, Specialisation = ? 
-            WHERE staffNo = ?
-        ");
+        $conn->begin_transaction();
 
-        if (!$stmt) {
+        try {
+            $stmtGet = $conn->prepare("SELECT username FROM doctor WHERE staffNo = ?");
+            $stmtGet->bind_param("s", $staffNo);
+            $stmtGet->execute();
+            $result = $stmtGet->get_result()->fetch_assoc();
+            $oldUsername = $result['username'] ?? null;
+            $stmtGet->close();
+
+            if (!$oldUsername) throw new Exception("Doctor user link not found.");
+
+            $stmtDoc = $conn->prepare("
+                UPDATE doctor 
+                SET firstname = ?, lastname = ?, Address = ?, Specialisation = ?, username = ? 
+                WHERE staffNo = ?
+            ");
+
+            $stmtDoc->bind_param("ssssss", $firstname, $lastname, $address, $specialisation, $newUsername, $staffNo);
+            
+            if (!$stmtDoc->execute()) {
+                throw new Exception("Doctor Update Failed: " . $conn->error);
+            }
+            $stmtDoc->close();
+
+            $stmtUser = $conn->prepare("UPDATE users SET username = ? WHERE username = ?");
+            $stmtUser->bind_param("ss", $newUsername, $oldUsername);
+            
+            if (!$stmtUser->execute()) {
+                throw new Exception("User Update Failed: " . $conn->error);
+            }
+            $stmtUser->close();
+
+            $conn->commit();
+            return true;
+
+        } catch (Exception $e) {
+            $conn->rollback();
+            error_log("Profile Update Error: " . $e->getMessage());
             return false;
         }
-
-        $stmt->bind_param("sss", $address, $specialisation, $staffNo);
-
-        return $stmt->execute();
     }
 }
 ?>

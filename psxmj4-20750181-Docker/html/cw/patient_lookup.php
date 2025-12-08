@@ -4,10 +4,9 @@ require 'includes/session.php';
 require_login();
 
 require 'includes/db_connection.php';
-
-require 'data_access/formatDisplayValue.php';
+require_once 'data_access/formatDisplayValue.php';
 require 'includes/renderPatientProfileView.php';
-require 'data_access/PatientDAO.php';
+require_once 'data_access/PatientDAO.php';
 
 $page_title = 'Patient Information';
 $view_nhs = $_GET['view_nhs'] ?? null;
@@ -15,6 +14,9 @@ $search_term = $_POST['patient_search'] ?? '';
 
 require 'includes/header.php';
 ?>
+
+<main class="container">
+
 
 <div class="patient-lookup-container">
 
