@@ -236,6 +236,44 @@ select {
     font-family: "Calisto MT", serif;
 }
 
+.btn-success {
+    display: inline-block;
+    background: #51AC74;
+    color: white;
+    padding: 6px 12px; 
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+}
+
+.btn-success:hover {
+    background: #3D8C5D;
+    transform: scale(1.02);
+}
+
+.btn-danger {
+    display: inline-block;
+    background: #d9534f; 
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+    border: 1px solid transparent; 
+    cursor: pointer;
+    font-size: 0.9em;
+    font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+}
+
+.btn-danger:hover {
+    background: #c9302c;
+    transform: scale(1.02);
+}
+
 /* ========================================= */
 /* 9. PROFESSIONAL FORM SYSTEM               */
 /* ========================================= */
@@ -409,3 +447,58 @@ select {
         gap: 5px;
     }
 }
+
+/* ========================================= */
+/* 12. MODAL SYSTEM (Popups)                 */
+/* ========================================= */
+.modal-overlay {
+    display: none; 
+    position: fixed; 
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(3px); 
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 100px; 
+}
+
+.modal-box {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px; 
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-top: 6px solid #51AC74; 
+    animation: slideDown 0.3s ease-out;
+    position: relative;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: #333;
+    font-weight: bold;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+.close-modal:hover { color: #d9534f; }

@@ -97,7 +97,7 @@ require 'includes/header.php';
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Submit Application</button>
-                <a href="home.php" class="btn btn-secondary">Cancel</a>
+                <a href="manage_account.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     <?php else: ?>

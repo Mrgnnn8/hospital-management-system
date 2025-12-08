@@ -42,13 +42,13 @@ require 'includes/header.php';
         </div>
         
         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
-            <a href="new_doctor.php" class="btn btn-primary">+ Register New Doctor</a>
+            <a href="add_doctor.php" class="btn btn-primary">+ Register New Doctor</a>
         <?php endif; ?>
     </div>
 
     <form method="GET" style="margin-bottom: 30px; display: flex; gap: 10px;">
-        <input type="text" name="search" placeholder="Search by Name, Staff ID, or Specialisation..." 
-               value="<?= safeDisplay($search) ?>" style="flex: 1;">
+        <input type="text" name="search" 
+                style="flex: 1;">
         <button type="submit" class="btn btn-secondary">Search</button>
         <?php if ($search): ?>
             <a href="doctor.php" class="btn btn-secondary" style="background: #999;">Clear</a>
@@ -61,7 +61,7 @@ require 'includes/header.php';
                 <tr>
                     <th>Staff ID</th>
                     <th>Full Name</th>
-                    <th>Specialisation</th>
+                    <th>Username</th>
                     <th>Contact Address</th>
                     <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
                         <th>Actions</th>
@@ -75,7 +75,7 @@ require 'includes/header.php';
                         <td>
                             <?= safeDisplay($row['firstname']) ?> <?= safeDisplay($row['lastname']) ?>
                         </td>
-                        <td><?= safeDisplay($row['Specialisation']) ?></td>
+                        <td><?= safeDisplay($row['username']) ?></td>
                         <td><?= safeDisplay($row['address']) ?></td>                        
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
                             <td>

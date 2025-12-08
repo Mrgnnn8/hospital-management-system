@@ -1,4 +1,5 @@
 <?php
+// Display errors for debugging
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php'; 
@@ -8,12 +9,17 @@ require_once 'data_access/DoctorDAO.php';
 
 require_login();
 
-$page_title = 'Manage Account & Profile';
+$page_title = 'My Profile';
 $error_message = '';
-$doctor_data = null; 
-$username = $_SESSION['username']; 
+$success_message = '';
+$doctor_data = null;
 
+$username = $_SESSION['username']; 
 $real_staff_no = DoctorDAO::getStaffNoByUsername($conn, $username);
+
+if (isset($_GET['status']) && $_GET['status'] === 'updated') {
+    $success_message = "Your profile details have been successfully updated.";
+}
 
 if ($real_staff_no) {
     $doctor_data = DoctorDAO::getDoctorProfile($conn, $real_staff_no);
@@ -23,54 +29,80 @@ if ($real_staff_no) {
 
 require 'includes/header.php'; 
 ?>
-<main class="container">
 
-<h2>Doctor Profile Overview</h2>
+<section class="task-form-area container">
+
+    <div style="border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h2 style="border: none; margin: 0; padding: 0; font-size: 2rem; color: #333;">
+                <?= safeDisplay(($doctor_data['firstname'] ?? '') . ' ' . ($doctor_data['lastname'] ?? 'Doctor')) ?>
+            </h2>
+            <p style="margin: 5px 0 0; color: #777; font-size: 1.1em;">
+                Staff ID: <strong><?= safeDisplay($real_staff_no) ?></strong>
+            </p>
+        </div>
     
-    <?php if ($error_message): ?>
-        <div class="alert alert-danger"><?= safeDisplay($error_message) ?></div>
+    </div>
+    
+    <?php if ($success_message): ?>
+        <div class="alert alert-success"><?= safeDisplay($success_message) ?></div>
     <?php endif; ?>
 
-    <div class="profile-details-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
-        
-        <div class="detail-card task-card">
-            <h3>Account Actions</h3>
-            <hr>
-            <p><a href="change_password.php" class="btn btn-secondary" style="width:100%; margin-bottom: 10px;">Change Password</a></p>
-            <p><a href="user_parking_permit.php" class="btn btn-secondary" style="width:100%;">Parking Permit</a></p>
-            <p><a href="edit_profile.php" class="btn btn-secondary" style="width:100%;">Edit Information</a></p>
+    <?php if ($error_message): ?>
+        <div class="alert alert-danger"><?= safeDisplay($error_message) ?></div>
+    <?php else: ?>
 
-        </div>
+        <h4 style="color: #51AC74; margin-top: 0;">Personal Details</h4>
+        <table class="styled-table" style="margin-top: 10px;">
+            <tbody>
+                <tr>
+                    <th style="width: 200px; color: #555;">Full Name</th>
+                    <td><?= safeDisplay($doctor_data['firstname']) ?> <?= safeDisplay($doctor_data['lastname']) ?></td>
+                </tr>
+                <tr>
+                    <th style="color: #555;">System Username</th>
+                    <td><?= safeDisplay($doctor_data['username']) ?></td>
+                </tr>
+                <tr>
+                    <th style="color: #555;">Gender</th>
+                    <td>
+                        <?php 
+                            $g = $doctor_data['gender'];
+                            echo ($g == 1) ? 'Female' : (($g == 2) ? 'Other' : 'Male');
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="color: #555;">Current Pay Band</th>
+                    <td>£<?= safeDisplay($doctor_data['pay']) ?> / year</td>
+                </tr>
+                <tr>
+                    <th style="color: #555;">Home Address</th>
+                    <td><?= safeDisplay($doctor_data['address']) ?></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div class="detail-card task-card">
-            <h3>Personal Information</h3>
-            <p class="guide-text">Review your core staff details.</p>
-            <hr>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <h4 style="color: #51AC74; margin-top: 0; margin-bottom: 15px;">Account Actions</h4>
             
-            <?php if ($doctor_data): ?>
-                <table class="styled-table no-header">
-                    <tbody>
-                        <tr><th>Staff ID:</th><td><?= safeDisplay($doctor_data['Doctor_id'] ?? $doctor_data['staffno']) ?></td></tr>
-                        <tr>
-                        <th>Name:</th>
-                        <td><?= safeDisplay(($doctor_data['firstname'] ?? '') . ' ' . ($doctor_data['lastname'] ?? '')) ?></td>
-                        </tr>
-                        <tr><th>Username:</th><td><?= safeDisplay($doctor_data['username']) ?></td></tr>
-                        <tr>
-                        <th>Gender:</th>
-                        <td><?= safeDisplay($doctor_data['gender'] == 1 ? 'Female' : 'Male') ?></td>
-                        </tr>
-                        <tr><th>Current Pay:</th><td>£<?= safeDisplay($doctor_data['pay']) ?></td></tr>
-                        <tr><th>Address:</th><td><?= safeDisplay($doctor_data['address']) ?></td></tr>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="edit_profile.php" class="btn btn-primary" style="margin: 0;">
+                    Edit My Details
+                </a>
 
-                    </tbody>
-                </table>
-                <br>
-            <?php else: ?>
-                <p>Profile data unavailable.</p>
-            <?php endif; ?>
+                <a href="change_password.php" class="btn btn-secondary" style="margin: 0;">
+                    Change Password
+                </a>
+                
+                <a href="user_parking_permit.php" class="btn btn-secondary" style="margin: 0;">
+                    Parking Permit Application
+                </a>
+            </div>
         </div>
-    </div>
+
+    <?php endif; ?>
+
 </section>
 
 <?php require 'includes/footer.php'; ?>

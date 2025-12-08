@@ -73,11 +73,7 @@ require 'includes/header.php';
         <label for="new_password">New Password:</label>
         <input type="password" id="new_password" name="new_password" required>
 
-        <div class="password-strength-container">
-            Strength: <span id="strength-text"></span>
-            <div class="strength-bar">
-                <div id="strength-bar-fill"></div>
-            </div>
+
         </div>
     </div>
 
@@ -88,7 +84,7 @@ require 'includes/header.php';
 
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Update Password</button>
-        <a href="home.php" class="btn btn-secondary">Cancel</a>
+        <a href="manage_account.php" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
 </section>
