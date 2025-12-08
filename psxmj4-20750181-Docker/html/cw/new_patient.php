@@ -6,6 +6,10 @@ require 'includes/session.php';
 require_once 'data_access/PatientDAO.php';
 require_once 'data_access/formatDisplayValue.php'; 
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 $page_title = 'Register New Patient';
@@ -62,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
             if (function_exists('logAction')) {
-                logAction($conn, $_SESSION['username'], 'CREATE_PATIENT', "Registered patient $firstname $lastname");
+                logAction($conn, $_SESSION['username'], 'CREATE_PATIENT', "Registered patient $firstname $lastname (NHS: $nhs_no)");
             }
 
             header("Location: patient_lookup.php?view_nhs=" . urlencode($nhs_no) . "&status=patient_created");
@@ -77,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require 'includes/header.php';
 ?>
 
-    <main class="container">
+<section class="task-form-area container">
 
     <h2><?= $page_title ?></h2>
     <p class="guide-text">Enter the details below to create a new patient record.</p>

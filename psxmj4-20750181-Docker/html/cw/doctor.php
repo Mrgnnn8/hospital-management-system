@@ -5,6 +5,10 @@ require 'includes/db_connection.php';
 require 'includes/session.php';
 require_once 'data_access/formatDisplayValue.php'; 
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 $page_title = 'Doctor Directory';
@@ -19,6 +23,10 @@ if (!empty($search)) {
     $term = "%" . $search . "%";
     $params = [$term, $term, $term, $term];
     $types = 'ssss';
+
+    if (function_exists('logAction')) {
+        logAction($conn, $_SESSION['username'], 'SEARCH_DOCTOR', "Searched directory for: '$search'");
+    }
 }
 
 $sql .= " ORDER BY lastname ASC";
@@ -47,8 +55,7 @@ require 'includes/header.php';
     </div>
 
     <form method="GET" style="margin-bottom: 30px; display: flex; gap: 10px;">
-        <input type="text" name="search" 
-                style="flex: 1;">
+        <input type="text" name="search" style="flex: 1;">
         <button type="submit" class="btn btn-secondary">Search</button>
         <?php if ($search): ?>
             <a href="doctor.php" class="btn btn-secondary" style="background: #999;">Clear</a>
@@ -96,4 +103,3 @@ require 'includes/header.php';
 </section>
 
 <?php require 'includes/footer.php'; ?>
-

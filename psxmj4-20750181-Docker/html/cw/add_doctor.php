@@ -6,6 +6,10 @@ require 'includes/session.php';
 require_once 'data_access/DoctorDAO.php';
 require_once 'data_access/formatDisplayValue.php'; 
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
@@ -23,7 +27,7 @@ $specialisation = '';
 $qualification = '';
 $pay = '';
 $gender_selection = 'Male'; 
-$consultant_status = '';
+$consultant_status = '0'; 
 $address = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         
         $gender_int = ($raw_gender === 'Female') ? 1 : 0; 
-        
         $qual_db = empty($qualification) ? null : $qualification;
 
         $result = DoctorDAO::createDoctor(
@@ -68,9 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($result === true) {
+            
             if (function_exists('logAction')) {
                 logAction($conn, $_SESSION['username'], 'CREATE_DOCTOR', "Added Dr. $lastname ($staffNo)");
             }
+            
             header("Location: doctor.php?msg=created");
             exit();
         } else {
@@ -96,14 +101,14 @@ require 'includes/header.php';
         <div class="form-row">
             <div class="form-group">
                 <label for="staffno">Staff ID Number (Required)</label>
-                <input type="text" id="staffno" name="staffno" maxlength="5" minlength="5">
+                <input type="text" id="staffno" name="staffno" maxlength="5" minlength="5" required>
                 <small>Must be exactly 5 characters.</small>
             </div>
             <div class="form-group">
                 <label for="consultantstatus">Consultant Status</label>
                 <select id="consultantstatus" name="consultantstatus">
-                    <option value="0" <?= ($consultant_status == '0') ? 'selected' : '' ?>>False</option>
-                    <option value="1" <?= ($consultant_status == '1') ? 'selected' : '' ?>>True</option>
+                    <option value="0" <?= ($consultant_status == '0') ? 'selected' : '' ?>>False </option>
+                    <option value="1" <?= ($consultant_status == '1') ? 'selected' : '' ?>>True </option>
                 </select>
             </div>
         </div>

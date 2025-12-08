@@ -6,6 +6,10 @@ require 'includes/session.php';
 require_once 'data_access/ParkingDAO.php';
 require_once 'data_access/formatDisplayValue.php';
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
@@ -18,29 +22,43 @@ $message = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     $app_id = $_POST['app_id'] ?? 0;
     $action = $_POST['action'] ?? '';
 
     if ($action === 'approve') {
-        $permit_no = trim($_POST['permit_no'] ?? '');
+        $permit_no = trim($_POST['permit_no'] ?? ''); 
+
         if (empty($permit_no)) {
             $error = "Permit Number is required.";
         } else {
             if (ParkingDAO::approveRequest($conn, $app_id, $permit_no)) {
+                
+                if (function_exists('logAction')) {
+                    logAction($conn, $_SESSION['username'], 'PARKING_APPROVE', "Approved Application #$app_id. Permit: $permit_no");
+                }
+
                 $message = "Application #$app_id Approved (Permit: $permit_no).";
             } else {
-                $error = "Database Error.";
+                $error = "Database Error approving request.";
             }
         }
+
     } elseif ($action === 'reject') {
         $reason = trim($_POST['reject_reason'] ?? '');
+
         if (empty($reason)) {
-            $error = "Rejection reason is required.";
+            $error = "You must provide a reason for rejection.";
         } else {
             if (ParkingDAO::rejectRequest($conn, $app_id, $reason)) {
+                
+                if (function_exists('logAction')) {
+                    logAction($conn, $_SESSION['username'], 'PARKING_REJECT', "Rejected App #$app_id. Reason: $reason");
+                }
+
                 $message = "Application #$app_id Rejected.";
             } else {
-                $error = "Database Error.";
+                $error = "Database Error rejecting request.";
             }
         }
     }

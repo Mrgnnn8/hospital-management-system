@@ -60,7 +60,7 @@ require 'includes/header.php';
                     <td><?= safeDisplay($doctor_data['firstname']) ?> <?= safeDisplay($doctor_data['lastname']) ?></td>
                 </tr>
                 <tr>
-                    <th style="color: #555;">System Username</th>
+                    <th style="color: #555;">Username</th>
                     <td><?= safeDisplay($doctor_data['username']) ?></td>
                 </tr>
                 <tr>
@@ -73,7 +73,7 @@ require 'includes/header.php';
                     </td>
                 </tr>
                 <tr>
-                    <th style="color: #555;">Current Pay Band</th>
+                    <th style="color: #555;">Salary</th>
                     <td>£<?= safeDisplay($doctor_data['pay']) ?> / year</td>
                 </tr>
                 <tr>

@@ -1,7 +1,13 @@
 <?php
+ini_set('display_errors', 1); error_reporting(E_ALL);
+
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_once 'data_access/formatDisplayValue.php';
+
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
 
 require_login();
 
@@ -17,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($new_password !== $confirm_new) {
         $error_message = "New passwords do not match.";
+    } elseif (strlen($new_password) < 4) {
+        $error_message = "New password must be at least 4 characters long.";
     } else {
 
         $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
@@ -25,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
-
             $stmt->bind_result($stored_password);
             $stmt->fetch();
 
@@ -37,8 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt2->bind_param("ss", $new_password, $username);
 
                 if ($stmt2->execute()) {
+                    
+                    if (function_exists('logAction')) {
+                        logAction($conn, $username, 'CHANGE_PASSWORD', "User manually changed their password.");
+                    }
+
                     session_unset();
                     session_destroy();
+                    
                     header("Location: index.php?password_changed=1");
                     exit();
                 } else {
@@ -53,40 +66,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 require 'includes/header.php';
 ?>
-<main class="container">
 
-<h2>Change Password</h2>
-<p class="guide-text">Update your account security credentials.</p>
+<section class="task-form-area container">
 
-<?php if (!empty($error_message)): ?>
-    <div class="alert alert-danger"><?= safeDisplay($error_message) ?></div>
-<?php endif; ?>
+    <h2>Change Password</h2>
+    <p class="guide-text">Update your account security credentials.</p>
 
-<form method="POST" action="change_password.php" class="styled-form">
+    <?php if (!empty($error_message)): ?>
+        <div class="alert alert-danger"><?= safeDisplay($error_message) ?></div>
+    <?php endif; ?>
 
-    <div class="form-group">
-        <label for="old_password">Current Password:</label>
-        <input type="password" id="old_password" name="old_password" required>
-    </div>
+    <form method="POST" action="change_password.php" class="styled-form">
 
-    <div class="form-group">
-        <label for="new_password">New Password:</label>
-        <input type="password" id="new_password" name="new_password" required>
-
-
+        <div class="form-group">
+            <label for="old_password">Current Password:</label>
+            <input type="password" id="old_password" name="old_password" required>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="confirm_new_password">Confirm New Password:</label>
-        <input type="password" id="confirm_new_password" name="confirm_new_password" required>
-    </div>
+        <div class="form-group">
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required>
+            <div id="password-strength-container"></div> 
+        </div>
 
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Update Password</button>
-        <a href="manage_account.php" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+        <div class="form-group">
+            <label for="confirm_new_password">Confirm New Password:</label>
+            <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Password</button>
+            <a href="manage_account.php" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
 </section>
 
 <script src="js/password_strength.js"></script>

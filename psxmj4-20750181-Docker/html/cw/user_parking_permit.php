@@ -6,6 +6,11 @@ require 'includes/session.php';
 require_once 'data_access/ParkingDAO.php';
 require_once 'data_access/DoctorDAO.php';
 require_once 'data_access/formatDisplayValue.php';
+
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 $page_title = 'Parking Permit Request';
@@ -34,6 +39,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
                 if (function_exists('logAction')) {
                     logAction($conn, $login_username, 'PARKING_REQUEST', "Requested $payment_type permit for $vehicle_reg");
                 }
+                
                 header("Location: user_parking_permit.php?status=success");
                 exit();
             } else {
@@ -54,7 +60,8 @@ if ($real_staff_no) {
 
 require 'includes/header.php';
 ?>
-<main class="container">
+
+<section class="task-form-area container">
 
     <h2>Request Staff Parking</h2>
 
@@ -84,7 +91,7 @@ require 'includes/header.php';
             <div class="form-group">
                 <label for="payment_type">Payment Plan:</label>
                 <select name="payment_type" id="payment_type" onchange="updateFee()" required>
-                    <option value="">-- Select Plan --</option>
+                    <option value="">View Options...</option>
                     <option value="Monthly">Monthly</option>
                     <option value="Yearly">Annual</option>
                 </select>
@@ -104,9 +111,11 @@ require 'includes/header.php';
         <p class="empty-state">Unable to load application form. Identity verification failed.</p>
     <?php endif; ?>
 
-</section> <hr class="section-divider">
+</section>
 
-    
+<hr class="section-divider">
+
+<section class="container">
     <h3>Application History</h3>
     <?php if ($my_requests && $my_requests->num_rows > 0): ?>
         <table class="styled-table">
@@ -115,7 +124,8 @@ require 'includes/header.php';
                     <th>Ref ID</th>
                     <th>Vehicle</th>
                     <th>Date Requested</th>
-                    <th>Payment Type</th> <th>Fee</th>
+                    <th>Payment Type</th> 
+                    <th>Fee</th>
                     <th>Status</th>
                     <th>Details</th>
                 </tr>
@@ -129,7 +139,8 @@ require 'includes/header.php';
                         <td>#<?= safeDisplay($row['permit_application_id']) ?></td>
                         <td><?= safeDisplay($row['vehicle_reg']) ?></td>
                         <td><?= safeDisplay($row['request_date']) ?></td>
-                        <td><?= safeDisplay($row['permit_choice']) ?></td> <td>£<?= safeDisplay($row['amount']) ?></td>
+                        <td><?= safeDisplay($row['permit_choice']) ?></td> 
+                        <td>£<?= safeDisplay($row['amount']) ?></td>
                         <td style="color: <?= $color ?>; font-weight: bold;"><?= safeDisplay($status) ?></td>
                         <td><?= safeDisplay($row['notes'], '-') ?></td>
                     </tr>
@@ -139,7 +150,6 @@ require 'includes/header.php';
     <?php else: ?>
         <p>You have no parking permit applications on record.</p>
     <?php endif; ?>
-    
 </section>
 
 <script>
@@ -147,14 +157,9 @@ require 'includes/header.php';
         const selector = document.getElementById('payment_type');
         const display = document.getElementById('fee_display');
         const val = selector.value;
-
-        if (val === 'Monthly') {
-            display.innerHTML = "£20.00 / month";
-        } else if (val === 'Yearly') {
-            display.innerHTML = "£200.00 / year";
-        } else {
-            display.innerHTML = "£0.00";
-        }
+        if (val === 'Monthly') display.innerHTML = "£20.00 / month";
+        else if (val === 'Yearly') display.innerHTML = "£200.00 / year";
+        else display.innerHTML = "£0.00";
     }
 </script>
 

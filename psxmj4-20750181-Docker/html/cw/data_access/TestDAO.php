@@ -4,7 +4,7 @@ require 'includes/db_connection.php';
 class TestDAO {
 
     public static function getAvailableTests($conn) {
-        $stmt = $conn->prepare("SELECT testid, testname FROM test ORDER BY testname ASC");
+        $stmt = $conn->prepare("SELECT testid, testname FROM test ORDER BY testid ASC");
         
         if ($stmt === false) {
             return false;

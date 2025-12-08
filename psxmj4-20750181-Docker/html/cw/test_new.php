@@ -1,12 +1,19 @@
 <?php
+ini_set('display_errors', 1); error_reporting(E_ALL);
+
 require 'includes/db_connection.php'; 
 require 'includes/session.php'; 
 require_once 'data_access/TestDAO.php';
 require_once 'data_access/PatientDAO.php'; 
 require_once 'data_access/formatDisplayValue.php'; 
+
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
-$page_title = 'Record Test Result';
+$page_title = 'Record Test Prescription';
 $error_message = '';
 
 $patient_pid = safeDisplay($_GET['pid'] ?? '');
@@ -15,7 +22,6 @@ $current_doctor_id = $_SESSION['username'];
 $patient_name = PatientDAO::getPatientNameById($conn, $patient_pid);
 
 if (empty($patient_pid) || !$patient_name) {
-
     header('Location: patient_lookup.php'); 
     exit();
 }
@@ -32,8 +38,13 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
         $result = TestDAO::recordResult($conn, $patient_pid, $test_id, $current_doctor_id, $test_date, $report);
 
         if ($result) {
+            
             if (function_exists('logAction')) {
-                logAction($conn, $current_doctor_id, 'RECORD_RESULT', "Recorded Test ID $test_id for PID $patient_pid");
+                logAction(
+                    $conn, 
+                    $current_doctor_id, 
+                    'RECORD_TEST',      
+                    "Recorded Test ID $test_id for Patient $patient_pid" );
             }
 
             header('Location: patient_lookup.php?view_nhs=' . $patient_pid . '&status=result_recorded');
@@ -54,7 +65,7 @@ require 'includes/header.php';
     <h2><?= $page_title ?></h2>
     
     <p class="guide-text">
-        Recording result for: <strong><?= $patient_name ?> (<?= $patient_pid ?>)</strong>
+        Prescription for: <strong><?= $patient_name ?> (<?= $patient_pid ?>)</strong>
     </p>
 
     <?php if ($error_message): ?>
@@ -65,7 +76,7 @@ require 'includes/header.php';
         <div class="form-group">
             <label for="test_id">Select Test Type:</label>
             <select name="test_id" id="test_id" required>
-                <option value="">-- Select a Test --</option>
+                <option value="">Select a Test</option>
                 <?php 
                 if ($available_tests) {
                     while ($row = $available_tests->fetch_assoc()) {
@@ -77,13 +88,13 @@ require 'includes/header.php';
         </div>
         
         <div class="form-group">
-            <label for="test_date">Date Performed:</label>
+            <label for="test_date">Date Prescribed:</label>
             <input type="date" id="test_date" name="test_date" value="<?= date('Y-m-d') ?>" required>
         </div>
 
         <div class="form-group">
-            <label for="report">Result / Report Details:</label>
-            <textarea id="report" name="report" rows="4" placeholder="Enter findings here..."></textarea>
+            <label for="report">Patient Symptoms</label>
+            <textarea id="report" name="report" rows="4" placeholder="Enter reasoning for the prescription here..."></textarea>
         </div>
         
         <div class="form-actions">
@@ -94,5 +105,5 @@ require 'includes/header.php';
 </section>
 
 <?php
-require_once __DIR__ . '/includes/footer.php';
+require 'includes/footer.php';
 ?>

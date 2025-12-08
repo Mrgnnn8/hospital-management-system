@@ -6,6 +6,10 @@ require 'includes/session.php';
 require_once 'data_access/DoctorDAO.php';
 require_once 'data_access/formatDisplayValue.php'; 
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
@@ -31,19 +35,18 @@ if (!$doctor) {
 
 $firstname      = $doctor['firstname'];
 $lastname       = $doctor['lastname'];
-$username       = $doctor['username'];
+$current_db_username = $doctor['username']; 
 $specialisation = $doctor['Specialisation'];
 $qualification  = $doctor['qualification'];
 $pay            = $doctor['pay'];
 $gender_val     = $doctor['gender']; 
 $consultant_val = $doctor['consultantstatus'];
-$address        = $doctor['Address'];
-
+$address        = $doctor['address'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $firstname      = trim($_POST['firstname'] ?? '');
     $lastname       = trim($_POST['lastname'] ?? '');
-    $username       = trim($_POST['username'] ?? '');
+    $new_username   = trim($_POST['username'] ?? '');
     $specialisation = trim($_POST['specialisation'] ?? '');
     $qualification  = trim($_POST['qualification'] ?? '');
     $pay            = trim($_POST['pay'] ?? '0');
@@ -54,9 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $new_password   = $_POST['password'] ?? ''; 
 
-    if (empty($firstname) || empty($lastname) || empty($username)) {
+    $original_username_param = $current_db_username;
+
+    if (empty($firstname) || empty($lastname) || empty($new_username)) {
         $error_message = "Name and Username are required.";
     } else {
+        
         $qual_db = empty($qualification) ? null : $qualification;
 
         $result = DoctorDAO::updateDoctorFull(
@@ -70,14 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $gender_val,
             $consultant_val,
             $address,
-            $username,
-            $new_password 
+            $new_username,            
+            $new_password,            
+            $original_username_param  
         );
 
         if ($result === true) {
+            
             if (function_exists('logAction')) {
-                logAction($conn, $_SESSION['username'], 'UPDATE_DOCTOR', "Updated Dr. $lastname ($target_staff_no)");
+                logAction($conn, $_SESSION['username'], 'UPDATE_DOCTOR', "Updated Dr. $lastname ($target_staff_no). Username: $new_username");
             }
+            
             header("Location: doctor.php?msg=updated");
             exit();
         } else {
@@ -109,8 +118,8 @@ require 'includes/header.php';
             <div class="form-group">
                 <label for="consultantstatus">Consultant Status</label>
                 <select id="consultantstatus" name="consultantstatus">
-                    <option value="0" <?= ($consultant_val == 0) ? 'selected' : '' ?>>No (Standard Doctor)</option>
-                    <option value="1" <?= ($consultant_val == 1) ? 'selected' : '' ?>>Yes (Consultant)</option>
+                    <option value="0" <?= ($consultant_val == 0) ? 'selected' : '' ?>>False</option>
+                    <option value="1" <?= ($consultant_val == 1) ? 'selected' : '' ?>>True</option>
                 </select>
             </div>
         </div>
@@ -152,21 +161,21 @@ require 'includes/header.php';
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" name="address" rows="2"><?= safeDisplay($address) ?></textarea>
+        </div>
+
         <h4 style="margin-top: 15px; color: #51AC74;">Login & Security</h4>
         <div class="form-row">
             <div class="form-group">
                 <label for="username">System Username</label>
-                <input type="text" id="username" name="username" value="<?= safeDisplay($username) ?>" required autocomplete="off">
+                <input type="text" id="username" name="username" value="<?= safeDisplay($current_db_username) ?>" required autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="password">Reset Password</label>
                 <input type="text" id="password" name="password" placeholder="Leave blank to keep current password" autocomplete="new-password">
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="address">Address</label>
-            <textarea id="address" name="address" rows="2"><?= safeDisplay($address) ?></textarea>
         </div>
 
         <div class="form-actions">

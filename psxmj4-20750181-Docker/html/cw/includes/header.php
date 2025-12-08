@@ -43,7 +43,7 @@ $staffno = DoctorDAO::getStaffNoByUsername($conn, $username)
                 <?php if ($is_admin): ?>
                     <li><a href="admin_parking.php">View permit requests</a></li>
                 
-                    <li class="admin-link"><a href="admin_audit_trail.php">Audit Trail</a></li>
+                    <li class="admin-link"><a href="audit_trail.php">Audit Trail</a></li>
 
                 <?php endif; ?>
 

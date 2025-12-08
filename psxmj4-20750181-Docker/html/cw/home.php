@@ -37,6 +37,12 @@ require_once 'data_access/WardDAO.php';
                 <a href="admin_parking.php" class="btn btn-primary">View Parking Permit Requests</a>
         </div>
 
+        <div class="task-card">
+                <h4>User Activity</h4>
+                <p>A detailed database for all user activity.</p>
+                <a href="audit_trail.php" class="btn btn-primary">View User Activity</a>
+        </div>
+
     <?php endif; ?>
 
     <div class="task-card">

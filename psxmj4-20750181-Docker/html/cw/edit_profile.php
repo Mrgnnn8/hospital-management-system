@@ -6,6 +6,10 @@ require 'includes/session.php';
 require_once 'data_access/DoctorDAO.php';
 require_once 'data_access/formatDisplayValue.php';
 
+if (file_exists('includes/functions.php')) {
+    require_once 'includes/functions.php';
+}
+
 require_login();
 
 $page_title = 'Edit My Profile';
@@ -50,6 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if ($result) {
+            
+            if (function_exists('logAction')) {
+                logAction($conn, $_SESSION['username'], 'UPDATE_PROFILE', "Updated personal details and login username (to $new_username) for Staff ID $staffNo.");
+            }
+
             $success_message = "Profile updated successfully.";
             
             if ($new_username !== $current_session_username) {
@@ -73,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 require 'includes/header.php';
 ?>
-<main class="container">
+<section class="task-form-area container">
 
     <h2>Edit Profile</h2>
     <p class="guide-text">Update your personal and login details.</p>

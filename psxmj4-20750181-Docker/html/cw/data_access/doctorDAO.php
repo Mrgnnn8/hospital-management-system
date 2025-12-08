@@ -6,26 +6,22 @@ class DoctorDAO
 {
     public static function getStaffNoByUsername($conn, $username)
     {
-        $stmt = $conn->prepare("SELECT staffNo FROM doctor WHERE username = ?");
+        $stmt = $conn->prepare("SELECT staffno FROM doctor WHERE username = ?");
 
-        if (!$stmt) {
-            return false;
-        }
+        if (!$stmt) return false;
 
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
 
-        return $result['staffNo'] ?? false;
+        return $result['staffno'] ?? ($result['staffNo'] ?? false);
     }
 
     public static function getDoctorProfile($conn, $staffNo)
     {
-        $stmt = $conn->prepare("SELECT * FROM doctor WHERE staffNo = ?");
+        $stmt = $conn->prepare("SELECT * FROM doctor WHERE staffno = ?");
 
-        if (!$stmt) {
-            return null;
-        }
+        if (!$stmt) return null;
 
         $stmt->bind_param("s", $staffNo);
         $stmt->execute();
@@ -34,92 +30,60 @@ class DoctorDAO
         return $result;
     }
 
-    
-    public static function updateDoctorProfile($conn, $staffNo, $firstname, $lastname, $address, $specialisation, $newUsername)
-    {
+public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $newPassword = null, $originalUsername = null) {
         $conn->begin_transaction();
 
         try {
-            $stmtGet = $conn->prepare("SELECT username FROM doctor WHERE staffNo = ?");
-            $stmtGet->bind_param("s", $staffNo);
-            $stmtGet->execute();
-            $result = $stmtGet->get_result()->fetch_assoc();
-            $oldUsername = $result['username'] ?? null;
-            $stmtGet->close();
-
-            if (!$oldUsername) throw new Exception("Doctor user link not found.");
-
             $stmtDoc = $conn->prepare("
                 UPDATE doctor 
-                SET firstname = ?, lastname = ?, Address = ?, Specialisation = ?, username = ? 
-                WHERE staffNo = ?
+                SET firstname=?, lastname=?, Specialisation=?, qualification=?, pay=?, gender=?, consultantstatus=?, address=?, username=?
+                WHERE staffno=?
             ");
-
-            $stmtDoc->bind_param("ssssss", $firstname, $lastname, $address, $specialisation, $newUsername, $staffNo);
+            
+            $stmtDoc->bind_param("ssssdiisss", $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $originalStaffNo);
             
             if (!$stmtDoc->execute()) {
-                throw new Exception("Doctor Update Failed: " . $conn->error);
+                throw new Exception("Failed to update doctor profile: " . $conn->error);
             }
             $stmtDoc->close();
 
-            $stmtUser = $conn->prepare("UPDATE users SET username = ? WHERE username = ?");
-            $stmtUser->bind_param("ss", $newUsername, $oldUsername);
-            
-            if (!$stmtUser->execute()) {
-                throw new Exception("User Update Failed: " . $conn->error);
+            $userExists = false;
+            if (!empty($originalUsername)) {
+                $checkStmt = $conn->prepare("SELECT 1 FROM users WHERE username = ?");
+                $checkStmt->bind_param("s", $originalUsername);
+                $checkStmt->execute();
+                if ($checkStmt->get_result()->num_rows > 0) {
+                    $userExists = true;
+                }
+                $checkStmt->close();
             }
-            $stmtUser->close();
 
-            $conn->commit();
-            return true;
+            if ($userExists) {
+                $stmtUser = $conn->prepare("UPDATE users SET username = ? WHERE username = ?");
+                $stmtUser->bind_param("ss", $newUsername, $originalUsername);
+                if (!$stmtUser->execute()) throw new Exception("Failed to sync username: " . $conn->error);
+                $stmtUser->close();
 
-        } catch (Exception $e) {
-            $conn->rollback();
-            error_log("Profile Update Error: " . $e->getMessage());
-            return false;
-        }
-    }
-
-
-    public static function createDoctor($conn, $staffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $username, $password) {
-        $conn->begin_transaction();
-
-        try {
-            $checkUser = $conn->prepare("SELECT username FROM users WHERE username = ?");
-            $checkUser->bind_param("s", $username);
-            $checkUser->execute();
-            if ($checkUser->get_result()->num_rows > 0) {
-                throw new Exception("Username '$username' is already taken.");
+                if (!empty($newPassword)) {
+                    $stmtPass = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+                    $stmtPass->bind_param("ss", $newPassword, $newUsername);
+                    $stmtPass->execute();
+                    $stmtPass->close();
+                }
+            } else {
+                $initialPassword = !empty($newPassword) ? $newPassword : $newUsername; 
+                
+                $stmtInsert = $conn->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+                $stmtInsert->bind_param("ss", $newUsername, $initialPassword);
+                
+                if (!$stmtInsert->execute()) {
+                    if ($conn->errno == 1062) {
+                        throw new Exception("The username '$newUsername' is already taken by another user.");
+                    }
+                    throw new Exception("Failed to create new user account: " . $conn->error);
+                }
+                $stmtInsert->close();
             }
-            $checkUser->close();
-
-            $checkID = $conn->prepare("SELECT staffno FROM doctor WHERE staffno = ?");
-            $checkID->bind_param("s", $staffNo);
-            $checkID->execute();
-            if ($checkID->get_result()->num_rows > 0) {
-                throw new Exception("Staff Number '$staffNo' already exists.");
-            }
-            $checkID->close();
-
-            $stmtUser = $conn->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
-            $stmtUser->bind_param("ss", $username, $password); 
-            
-            if (!$stmtUser->execute()) {
-                throw new Exception("Failed to create user account: " . $conn->error);
-            }
-            $stmtUser->close();
-
-            $stmtDoc = $conn->prepare("
-                INSERT INTO doctor (staffno, firstname, lastname, Specialisation, qualification, pay, gender, consultantstatus, address, username) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-
-            $stmtDoc->bind_param("sssssdisss", $staffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $username);
-
-            if (!$stmtDoc->execute()) {
-                throw new Exception("Failed to create doctor profile: " . $conn->error);
-            }
-            $stmtDoc->close();
 
             $conn->commit();
             return true;
@@ -130,49 +94,35 @@ class DoctorDAO
         }
     }
 
-
-    public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $newPassword = null) {
+    public static function createDoctor($conn, $staffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $username, $password) {
         $conn->begin_transaction();
 
         try {
-            $stmtGet = $conn->prepare("SELECT username FROM doctor WHERE staffno = ?");
-            $stmtGet->bind_param("s", $originalStaffNo);
-            $stmtGet->execute();
-            $result = $stmtGet->get_result()->fetch_assoc();
-            $oldUsername = $result['username'] ?? null;
-            $stmtGet->close();
+            $checkUser = $conn->prepare("SELECT username FROM users WHERE username = ?");
+            $checkUser->bind_param("s", $username);
+            $checkUser->execute();
+            if ($checkUser->get_result()->num_rows > 0) throw new Exception("Username '$username' is already taken.");
+            $checkUser->close();
 
-            if (!$oldUsername) {
-                throw new Exception("Original doctor record not found.");
-            }
+            $checkID = $conn->prepare("SELECT staffno FROM doctor WHERE staffno = ?");
+            $checkID->bind_param("s", $staffNo);
+            $checkID->execute();
+            if ($checkID->get_result()->num_rows > 0) throw new Exception("Staff Number '$staffNo' already exists.");
+            $checkID->close();
 
-            $stmtDoc = $conn->prepare("
-                UPDATE doctor 
-                SET firstname=?, lastname=?, Specialisation=?, qualification=?, pay=?, gender=?, consultantstatus=?, address=?, username=?
-                WHERE staffno=?
-            ");
-            $stmtDoc->bind_param("ssssdiisss", $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $originalStaffNo);
-            
-            if (!$stmtDoc->execute()) {
-                throw new Exception("Failed to update doctor profile: " . $conn->error);
-            }
-            $stmtDoc->close();
-
-            $stmtUser = $conn->prepare("UPDATE users SET username = ? WHERE username = ?");
-            $stmtUser->bind_param("ss", $newUsername, $oldUsername);
-            if (!$stmtUser->execute()) {
-                throw new Exception("Failed to sync username: " . $conn->error);
-            }
+            $stmtUser = $conn->prepare("INSERT INTO users (username, password, is_admin) VALUES (?, ?, 0)");
+            $stmtUser->bind_param("ss", $username, $password); 
+            if (!$stmtUser->execute()) throw new Exception("Failed to create user account.");
             $stmtUser->close();
 
-            if (!empty($newPassword)) {
-                $stmtPass = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
-                $stmtPass->bind_param("ss", $newPassword, $newUsername);
-                if (!$stmtPass->execute()) {
-                    throw new Exception("Failed to update password.");
-                }
-                $stmtPass->close();
-            }
+            $stmtDoc = $conn->prepare("
+                INSERT INTO doctor (staffno, firstname, lastname, Specialisation, qualification, pay, gender, consultantstatus, address, username) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            $stmtDoc->bind_param("sssssdisss", $staffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $username);
+            
+            if (!$stmtDoc->execute()) throw new Exception("Failed to create doctor profile.");
+            $stmtDoc->close();
 
             $conn->commit();
             return true;
