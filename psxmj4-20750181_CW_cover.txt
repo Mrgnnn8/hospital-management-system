@@ -1,1 +1,69 @@
-Test
+// Databases, interfaces and software design principles
+// Coursework
+
+
+Student Name: Morgan Jones
+Student Number: 20750181
+Student Username: PSXMJ4
+
+
+
+Core files
+
+- CSS (Directory):
+	- index.css
+	- style.css
+	- qmc.jpg
+
+- CW (Directory):
+
+	- data_access (Directory):
+		- AuditDAO.php
+		- DoctorDAO.php
+		- formatDisplayValue.php
+		- ParkingDAO.php
+		- PatientDAO.php
+		- TestDAO.php
+		- WardDAO.php
+
+	- includes (Directory):
+		- db_connection.php
+		- footer.php
+		- header.php
+		- logout.php
+		- renderPatientProfileView.php
+		- session.php
+
+	- index.php
+	- manage_account.php
+	- new_patient.php
+	- patient_lookup.php
+	- test_new.php
+	- user_parking_permit.php
+	- ward_capacity.php
+	- add_doctor.php
+	- add_new_test.php
+	- admin_parking.php
+	- audit_trail.php
+	- change_password.php
+	- doctor.php
+	- edit_doctor.php
+	- edit_profile.php
+	- home.php
+
+- JS (Directory):
+	- validate_doctor.js
+	- validate_patient.js
+
+- mariadb (Directory):
+	- Hospital.sql
+
+
+
+RESOURCES USED:
+
+When designing this system, all the design choices were made by me, with inspiration taking for existing design solutions. 
+
+- https://w3schools.com/css/css_website_layout.asp  **Formed the main tool for decision making around web page layout and professional design choices.
+
+- https://wpdcan.com/css-login/  **This site provided inspiration for index.php, however, the design was mainly constructed around my own vision.

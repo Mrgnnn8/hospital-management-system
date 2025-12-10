@@ -1,22 +1,22 @@
-/* ========================================= */
-/* 1. GLOBAL SETTINGS                        */
-/* ========================================= */
+/* This is the style sheet for all UI past index.php */
+/* These choices were made by me personally however, I did take inspiration from w3schoolds.com/css/css_website_layout.asp
+
+/* GLOBAL SETTINGS */
+
 * {
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    box-sizing: border-box; /* Ensures padding doesn't break layout width */
+    box-sizing: border-box;
 }
 
-/* ========================================= */
-/* 2. BODY & BACKGROUND (Sticky Footer Setup)*/
-/* ========================================= */
+/* BODY & BACKGROUND */
+
 body {
     margin: 0;
     padding: 0;
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     color: #555; 
     
-    /* Background Image */
     background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
                 url('../qmc.jpg'); 
     background-size: cover;
@@ -24,32 +24,30 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed; 
     
-    /* ✅ KEY FIX: This forces the footer to the bottom */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ========================================= */
-/* 3. HEADER STYLING (Fixed Layout)          */
-/* ========================================= */
+/* HEADER STYLING */
+
 header {
     background: #51AC74; 
     color: white;
-    padding: 10px 0; /* Reduced vertical padding slightly */
+    padding: 10px 0; 
     box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
     position: relative; 
     z-index: 1000; 
 }
 
 .header-container {
-    width: 98%; /* Use almost full width to fit buttons */
+    width: 98%;
     max-width: 1400px; 
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap; /* ✅ FORCE SINGLE LINE */
+    flex-wrap: nowrap; 
     gap: 15px;
 }
 
@@ -58,20 +56,19 @@ header h1 {
     font-size: 1.4rem;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     white-space: nowrap; 
-    flex-shrink: 0; /* Prevents title from squashing */
+    flex-shrink: 0; 
 }
 
-/* ========================================= */
-/* 4. NAVIGATION MENUS (Compact)             */
-/* ========================================= */
+/* NAVIGATION MENUS */
+
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     align-items: center;
-    flex-wrap: nowrap; /* ✅ FORCE SINGLE LINE */
-    gap: 5px; /* Tight spacing */
+    flex-wrap: nowrap; 
+    gap: 5px; 
 }
 
 nav li {
@@ -82,12 +79,12 @@ nav a {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    padding: 8px 10px; /* Compact padding */
+    padding: 8px 10px; 
     border-radius: 3px; 
     border: 1px solid transparent;
     white-space: nowrap; 
     display: inline-block;
-    font-size: 0.9rem; /* Slightly smaller text to fit all buttons */
+    font-size: 0.9rem; 
 }
 
 nav a:hover {
@@ -105,7 +102,6 @@ nav a:hover {
     border-color: #d9534f;
 }
 
-/* Responsive: Only wrap on very small screens (Tablets/Phones) */
 @media (max-width: 1000px) {
     .header-container {
         flex-direction: column;
@@ -117,9 +113,8 @@ nav a:hover {
     }
 }
 
-/* ========================================= */
-/* 5. USER INFO BAR                          */
-/* ========================================= */
+/* USER INFO BAR */
+
 .user-info-bar {
     background: rgba(255, 255, 255, 0.9);
     border-bottom: 1px solid #afafaf;
@@ -139,9 +134,8 @@ nav a:hover {
     color: #51AC74; 
 }
 
-/* ========================================= */
-/* 6. MAIN CONTAINER & PANELS                */
-/* ========================================= */
+/* MAIN CONTAINER & PANELS */
+
 .container {
     width: 95%;
     max-width: 1200px;
@@ -150,7 +144,6 @@ nav a:hover {
     padding: 30px;
     border-radius: 3px;
     box-shadow: 0px 0px 8px #777; 
-    /* Allow it to grow, but don't force height here to avoid gaps */
 }
 
 h2, h3, h4 {
@@ -160,9 +153,8 @@ h2, h3, h4 {
     display: inline-block;
 }
 
-/* ========================================= */
-/* 7. DASHBOARD CARDS                        */
-/* ========================================= */
+/* DASHBOARD CARDS */
+
 .task-grid {
     display: flex;
     flex-wrap: wrap;
@@ -187,9 +179,8 @@ h2, h3, h4 {
     box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
 }
 
-/* ========================================= */
-/* 8. BUTTONS & INPUTS (Global)              */
-/* ========================================= */
+/* BUTTONS & INPUTS */
+
 .btn-primary {
     display: inline-block;
     background: #51AC74;
@@ -274,9 +265,8 @@ select {
     transform: scale(1.02);
 }
 
-/* ========================================= */
-/* 9. PROFESSIONAL FORM SYSTEM               */
-/* ========================================= */
+/* FORM SYSTEM */
+
 .task-form-area {
     background: #ffffff;
     padding: 40px;
@@ -315,7 +305,6 @@ select {
     font-size: 0.9rem;
 }
 
-/* Styled Inputs */
 .styled-form input[type="text"],
 .styled-form input[type="password"],
 .styled-form input[type="number"],
@@ -370,9 +359,8 @@ select {
     .task-form-area { padding: 20px; }
 }
 
-/* ========================================= */
-/* 10. TABLES                                */
-/* ========================================= */
+/* TABLES */
+
 .styled-table {
     width: 100%;
     border-collapse: collapse;
@@ -415,14 +403,12 @@ select {
     color: #555;
 }
 
-/* ========================================= */
-/* 11. FOOTER STYLING                        */
-/* ========================================= */
+/* FOOTER STYLING */
+
 .site-footer {
     background: #3D8C5D; 
     color: white;
     padding: 15px 0;
-    /* ✅ KEY FIX: Pushes footer to the bottom of the flex container */
     margin-top: auto; 
     font-size: 0.9em;
 }
@@ -448,9 +434,8 @@ select {
     }
 }
 
-/* ========================================= */
-/* 12. MODAL SYSTEM (Popups)                 */
-/* ========================================= */
+/* MODAL SYSTEM */
+
 .modal-overlay {
     display: none; 
     position: fixed; 
@@ -503,9 +488,8 @@ select {
 }
 .close-modal:hover { color: #d9534f; }
 
-/* ========================================= */
-/* 13. TEST CATALOGUE (Chips UI)             */
-/* ========================================= */
+/* TEST CATALOGUE */
+
 .test-catalogue-grid {
     display: flex;
     flex-wrap: wrap;
@@ -567,9 +551,6 @@ select {
     font-style: italic;
 }
 
-/* ========================================= */
-/* 14. SPLIT-SCREEN MANAGER (Test Catalogue) */
-/* ========================================= */
 .split-view-container {
     display: grid;
     grid-template-columns: 2fr 1fr; 

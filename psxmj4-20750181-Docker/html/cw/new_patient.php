@@ -145,7 +145,7 @@ require 'includes/header.php';
                        value="<?= safeDisplay($phone, '') ?>" required>
             </div>
             <div class="form-group" style="flex: 1;">
-                <label for="emergencyphone">Emergency Phone:</label>
+                <label for="emergencyphone">(Optional) Emergency Phone:</label>
                 <input type="tel" id="emergencyphone" name="emergencyphone" 
                        value="<?= safeDisplay($emergencyphone, '') ?>" required>
             </div>
