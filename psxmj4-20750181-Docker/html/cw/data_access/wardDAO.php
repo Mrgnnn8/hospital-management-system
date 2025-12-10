@@ -1,5 +1,11 @@
 <?php
+
+//WardDAO controls all the backend relating to ward information.
+//FOR FUTUTRE DEVELOPERS: any functionality relating to wards should be implemented here.
+
 class WardDAO {
+
+    //Returns all wards within QMC
 
     public static function getAllWardsAvailability($conn) {
         $sql = "

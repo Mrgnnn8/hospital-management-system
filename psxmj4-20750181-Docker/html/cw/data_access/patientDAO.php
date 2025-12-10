@@ -1,8 +1,14 @@
 <?php
+
+// PatientDAO is the backend functionality for all pages which interact with databases storing patient information
+// FOR FUTURE DEVELOPERS: When developing the functionality of patient pages, use and add to the function catalogue here.
+
 require 'includes/db_connection.php';
 
 class PatientDAO
 {
+
+    // Function which takes the inputted string and searches for it in NHS No and lastname column of the patient database.
 
     public static function searchPatients($conn, $search_term = '') {
         $sql = "SELECT * FROM patient";
@@ -22,6 +28,8 @@ class PatientDAO
         $stmt->execute();
         return $stmt->get_result();
     }
+
+    // Function which returns information for all tables relating to a specific patient (produces a patient profile).
 
     public static function getFullPatientData($conn, $nhs_no) {
         //Core Patient Info
@@ -80,6 +88,8 @@ class PatientDAO
         return $patient;
     }
 
+    // Returns the patient name for an entered NHS no.
+
     public static function getPatientNameById($conn, $nhs_no)
     {
         $stmt = $conn->prepare("SELECT firstname, lastname FROM patient WHERE NHSno = ?");
@@ -98,6 +108,8 @@ class PatientDAO
 
         return false;
     }
+
+    // Function to add a new patient into the patient database.
 
     public static function insertPatient($conn, $nhs_no, $firstname, $lastname, $phone, $address, $age, $gender, $emergencyphone)
     {

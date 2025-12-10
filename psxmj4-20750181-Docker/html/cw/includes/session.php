@@ -1,5 +1,10 @@
 <?php
+
+// Allows for the tracking of a user across different pages.
+
 session_start();
+
+// Times out a user after 15 minutes, once they refresh they will be returned to index.php
 
 $timeout_seconds = 900;
 
@@ -14,12 +19,16 @@ if (isset($_SESSION['last_activity'])) {
 
 $_SESSION['last_activity'] = time();
 
+// Enforces all pages past index.php to be logged in to view.
+
 function require_login() {
     if (!isset($_SESSION['logged_in'])) {
         header("Location: index.php");
         exit();
     }
 }
+
+// Enforces is_admin = True to view present pages.
 
 function require_admin() {
     require_login(); 

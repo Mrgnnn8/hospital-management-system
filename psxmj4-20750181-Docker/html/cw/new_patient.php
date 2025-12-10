@@ -1,4 +1,7 @@
 <?php
+
+//Front end functionality to add a new patient into the 'patient' database.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';

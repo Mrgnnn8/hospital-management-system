@@ -1,4 +1,7 @@
 <?php
+
+// Should be included on every page past index.php
+
 require_once 'data_access/DoctorDAO.php';
 
 $page_title = $page_title ?? 'QMC Dashboard';

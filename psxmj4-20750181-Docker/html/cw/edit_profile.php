@@ -1,4 +1,7 @@
 <?php
+
+//Frontend functionality to enable the logged in user to change their stored information.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';

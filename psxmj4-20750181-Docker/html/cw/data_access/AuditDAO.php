@@ -1,5 +1,11 @@
 <?php
+
+//AuditDAO is the backend functionality to record all user activity within the system.
+// FOR FUTURE DEVELOPERS: When expanding the functionality of Audit Trail ensure to add backend functionality here.
+
 class AuditDAO {
+
+    // Function designed to log any action which occurs on the system.
 
     public static function log($conn, $staffNo, $role, $action, $description) {
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
@@ -14,6 +20,8 @@ class AuditDAO {
         }
         return false;
     }
+
+    // Function to search through the log database and retrieve specific informatin and admin may be looking for.
 
     public static function getLogs($conn, $staffNoFilter = '', $actionFilter = '') {
         $sql = "SELECT * FROM audit_log WHERE 1=1";
@@ -42,6 +50,8 @@ class AuditDAO {
         return $stmt->get_result();
     }
     
+    // Function to return all the different activity types have occured on the system. Enables an admin to more precisely search.
+
     public static function getActionTypes($conn) {
         return $conn->query("SELECT DISTINCT action_type FROM audit_log ORDER BY action_type ASC");
     }

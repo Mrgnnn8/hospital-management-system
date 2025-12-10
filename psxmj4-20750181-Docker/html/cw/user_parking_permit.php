@@ -1,4 +1,7 @@
 <?php
+
+//Frontend functionality for a user to request a parking permit and view its current status.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';

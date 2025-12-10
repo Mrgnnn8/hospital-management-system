@@ -1,4 +1,7 @@
 <?php
+
+//Functionality + Frontend for users to change their password stored in 'users'.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';

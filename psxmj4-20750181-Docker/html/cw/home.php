@@ -1,4 +1,7 @@
 <?php
+
+//The design for Dashboard.
+
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_login();
@@ -26,9 +29,9 @@ require_once 'data_access/WardDAO.php';
     <?php if ($is_admin): ?>
 
         <div class="task-card">
-                <h4>Doctor Directory</h4>
-                <p>View all currently employed doctors.</p>
-                <a href="doctor.php" class="btn btn-primary">View Doctors</a>
+                <h4>Staff Directory</h4>
+                <p>All staff profiles of staff currently employed at QMC.</p>
+                <a href="doctor.php" class="btn btn-primary">View staff</a>
         </div>
 
         <div class="task-card">

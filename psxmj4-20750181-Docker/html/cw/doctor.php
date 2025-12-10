@@ -1,4 +1,7 @@
 <?php
+
+//Frontend for displaying all doctors and their details stored in 'doctor'.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';
@@ -45,12 +48,12 @@ require 'includes/header.php';
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <div>
-            <h2>Doctor Directory</h2>
+            <h2>Staff Directory</h2>
             <p class="guide-text">Search and view details of all hospital staff.</p>
         </div>
         
         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
-            <a href="add_doctor.php" class="btn btn-primary">+ Register New Doctor</a>
+            <a href="add_doctor.php" class="btn btn-primary">Register New Staff Member</a>
         <?php endif; ?>
     </div>
 

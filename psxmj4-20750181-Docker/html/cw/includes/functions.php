@@ -1,4 +1,7 @@
 <?php
+
+// Middle man function for audit trail. Figures out who the user is and what role they have within the system.
+
 require_once __DIR__ . '/../data_access/AuditDAO.php';
 require_once __DIR__ . '/../data_access/DoctorDAO.php'; 
 

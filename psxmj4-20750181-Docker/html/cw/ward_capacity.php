@@ -1,4 +1,7 @@
 <?php 
+
+//Frontend functionality to return all wards and their current capacity.
+
 require 'includes/db_connection.php';
 require 'includes/session.php';
 require_once 'data_access/WardDAO.php';

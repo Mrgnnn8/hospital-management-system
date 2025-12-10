@@ -1,5 +1,7 @@
 <?php
 
+// When a doctor presses 'view profile' within patient directory, this is the file responsible for the front end display.
+
 function renderPatientFullProfile($patient) {
 
     if (!$patient) {

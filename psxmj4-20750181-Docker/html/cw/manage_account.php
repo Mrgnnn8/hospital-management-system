@@ -1,5 +1,7 @@
 <?php
-// Display errors for debugging
+
+// Front end for a user to view the different functionality controls they have for their information.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php'; 

@@ -1,4 +1,7 @@
 <?php
+
+//frontend functionality to prescribe a new test to a patient in 'patient_test'.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php'; 

@@ -1,5 +1,7 @@
 <?php
-// Display errors for debugging
+
+// Frontend for adding a new test type to 'TEST'
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';
@@ -7,7 +9,6 @@ require 'includes/session.php';
 require_once 'data_access/TestDAO.php';
 require_once 'data_access/formatDisplayValue.php'; 
 
-// ✅ 1. INCLUDE AUDIT FUNCTIONS
 if (file_exists('includes/functions.php')) {
     require_once 'includes/functions.php';
 }
@@ -17,7 +18,6 @@ require_login();
 $page_title = 'Manage Test Catalogue';
 $message = '';
 
-// Handle Form Submission
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $new_test_name = safeDisplay($_POST['test_name'] ?? '');
@@ -28,7 +28,6 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
         $new_id = TestDAO::createNewTest($conn, $new_test_name);
 
         if ($new_id) {
-            // ✅ AUDIT TRIGGER
             if (function_exists('logAction')) {
                 logAction($conn, $_SESSION['username'], 'CREATE_TEST', "Added new test type: $new_test_name");
             }

@@ -1,9 +1,15 @@
 <?php
 
+// DoctorDAO is a series of global function which power the backend functionality of anything relating to doctors.
+// FOR FUTURE DEVELOPERS: When expanding the functionality of features relating to doctors, add the backend functionality here.
+
 require 'includes/db_connection.php';
 
 class DoctorDAO
 {
+
+    // Function to return the StaffNo of the user logged in.
+
     public static function getStaffNoByUsername($conn, $username)
     {
         $stmt = $conn->prepare("SELECT staffno FROM doctor WHERE username = ?");
@@ -16,6 +22,8 @@ class DoctorDAO
 
         return $result['staffno'] ?? ($result['staffNo'] ?? false);
     }
+
+    // Function to return all information linked to a specific StaffNo.
 
     public static function getDoctorProfile($conn, $staffNo)
     {
@@ -30,7 +38,9 @@ class DoctorDAO
         return $result;
     }
 
-public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $newPassword = null, $originalUsername = null) {
+    // Function to update information stored within a row in the doctor table.
+    
+    public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $newPassword = null, $originalUsername = null) {
         $conn->begin_transaction();
 
         try {
@@ -93,6 +103,8 @@ public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $la
             return $e->getMessage();
         }
     }
+
+    // Function for admins to create a new doctor profile within the doctor table.
 
     public static function createDoctor($conn, $staffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $username, $password) {
         $conn->begin_transaction();

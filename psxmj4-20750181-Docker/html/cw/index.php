@@ -1,4 +1,7 @@
 <?php
+
+//Login page
+
 require 'includes/db_connection.php';
 require 'includes/session.php';
 

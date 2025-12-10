@@ -1,4 +1,7 @@
 <?php
+
+//Frontend functionality to search for a specific patient stored in 'patient'.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/session.php';

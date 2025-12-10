@@ -1,4 +1,8 @@
 <?php
+
+// Establishes a database handshake on every page.
+//  Every PHP file that needs to read or write data should include 'requires 'includes/db_connection'' at the top.
+
 $host = "mariadb";       
 $user = "root";         
 $pass = "rootpwd";       

@@ -1,8 +1,13 @@
 <?php
+// ParkingDAO handles all the back end functionality when interacting with 'user_parking_permit' database.
+// FOR FUTURE DEVELOPERS: When expanding or changing the functionality of parking permits, ensure all back end is stored here.
+
 require 'includes/db_connection.php';
 
 class ParkingDAO
 {
+
+    // Function to create a new parking permit request within the database (user end)
 
     public static function createRequest($conn, $staffNo, $vehicleReg, $paymentType)
     {
@@ -24,6 +29,8 @@ class ParkingDAO
         return $stmt->execute();
     }
 
+    // Function which returns the application history of the user logged in
+
     public static function getUserRequests($conn, $staffNo)
     {
         $stmt = $conn->prepare("
@@ -36,6 +43,9 @@ class ParkingDAO
         return $stmt->get_result();
     }
 
+    // Function which updates the status of an application depending on an admins decision.
+    // Ensures the user sees the immediate result on their 'manage account' page.
+
     public static function updateStatus($conn, $applicationId, $status, $adminNote)
     {
         $stmt = $conn->prepare("
@@ -47,6 +57,8 @@ class ParkingDAO
         return $stmt->execute();
     }
 
+    // Function which returns the fees of the different permit types.
+
     public static function getFee($paymentType)
     {
         if ($paymentType === 'Monthly')
@@ -56,13 +68,16 @@ class ParkingDAO
         return 0.00;
     }
 
-    // Admin functions
+    //Admin side
+    // Returns a table of all requests within the system.
 
     public static function getAllRequests($conn) {
         $sql = "SELECT * FROM parking_permit_status ORDER BY request_date DESC";
         $result = $conn->query($sql);
         return $result;
     }
+
+    //Function which updates the database entry to approved and permentantly assigns a permit number to the user.
 
     public static function approveRequest($conn, $applicationId, $permitNo) {
         $stmt = $conn->prepare("
@@ -73,6 +88,8 @@ class ParkingDAO
         $stmt->bind_param("si", $permitNo, $applicationId);
         return $stmt->execute();
     }
+
+    // Function whihc updates the database entry to rejected and attaches a note as to why.
 
     public static function rejectRequest($conn, $applicationId, $note) {
         $stmt = $conn->prepare("

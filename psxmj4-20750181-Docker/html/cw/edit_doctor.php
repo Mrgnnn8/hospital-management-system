@@ -1,4 +1,8 @@
 <?php
+
+//Front end for admin functionality to change the specified doctors stored information.
+//This page also is how a doctor can reset a users password.
+
 ini_set('display_errors', 1); error_reporting(E_ALL);
 
 require 'includes/db_connection.php';
