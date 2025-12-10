@@ -38,7 +38,26 @@ class DoctorDAO
         return $result;
     }
 
-    // Function to update information stored within a row in the doctor table.
+    // Function for users to edit their own profile.
+
+    public static function updateDoctorProfile($conn, $staffNo, $firstname, $lastname, $address, $specialisation, $username) {
+        $stmt = $conn->prepare("
+            UPDATE doctor 
+            SET firstname = ?, lastname = ?, address = ?, specialisation = ?
+            WHERE staffno = ?
+        ");
+        
+        if (!$stmt) return false;
+
+        $stmt->bind_param("sssss", $firstname, $lastname, $address, $specialisation, $staffNo);
+        $success = $stmt->execute();
+        $stmt->close();
+
+        return $success;
+    }
+
+
+    // Function to update information stored within a row in the doctor table. Used for ADMIN
     
     public static function updateDoctorFull($conn, $originalStaffNo, $firstname, $lastname, $spec, $qual, $pay, $gender, $consultantStatus, $address, $newUsername, $newPassword = null, $originalUsername = null) {
         $conn->begin_transaction();

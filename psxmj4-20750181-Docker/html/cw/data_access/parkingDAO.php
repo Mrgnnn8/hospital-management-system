@@ -91,10 +91,12 @@ class ParkingDAO
 
     // Function whihc updates the database entry to rejected and attaches a note as to why.
 
-    public static function rejectRequest($conn, $applicationId, $note) {
+    public static function rejectRequest($conn, $applicationId, $notes) {
         $stmt = $conn->prepare("
             UPDATE parking_permit_status
-            SET status = 'Approved', notes = ?, last_updated = NOW()
+            SET status = 'Rejected', 
+            notes = ?, 
+            last_update = NOW()
             WHERE permit_application_id = ?
         ");
         $stmt->bind_param("si", $notes, $applicationId);
